@@ -10,7 +10,7 @@ import CustomStore from 'devextreme/data/custom_store';
 import BudgetDetailTemplate from "./BudgetDetailTemplate";
 import { BudgetReps } from "./BudgetReps";
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://localhost:7071/api/BudgetManager";
 
 export class Budget extends Component {
   constructor(props) {
@@ -19,12 +19,12 @@ export class Budget extends Component {
     this.state = {
       brandsData: new CustomStore({
         key: 'id',
-        load: () => this.sendRequest(`${API_URL}/brands`),
-        insert: (values) => this.sendRequest(`${API_URL}/brands`, 'POST', JSON.stringify(values)),
-        update: (key, values) => this.sendRequest(`${API_URL}/brands/${key}`, 'PATCH', JSON.stringify(values)),
-        remove: (key) => this.sendRequest(`${API_URL}/brands/${key}`, 'DELETE', null),
+        load: () => this.sendRequest(`${API_URL}`),
+        // insert: (values) => this.sendRequest(`${API_URL}`, 'POST', JSON.stringify(values)),
+        // update: (key, values) => this.sendRequest(`${API_URL}/${key}`, 'PATCH', JSON.stringify(values)),
+        // remove: (key) => this.sendRequest(`${API_URL}/${key}`, 'DELETE', null),
       }),
-    };    
+    };
   }
 
   sendRequest(url, method = 'GET', data = {}) {
@@ -71,21 +71,20 @@ export class Budget extends Component {
         <h2>Brand Level Budget</h2>
 
         <DataGrid id="grid-container" 
-          dataSource={brandsData} >
+                  dataSource={brandsData} >
 
-          <Column dataField="name" caption="Brand / Produit"></Column>
-          <Column
-            dataField="budget"
-            dataType="number"
-            caption="Manager Budget/Budget Gestionnaire"
-            calculateCellValue={this.getBrandBudgetTotal}
-          ></Column>
+          <Column dataField="sales_Area_Name" caption="Manager Territory Name/Nom territoire Gestionnaire"></Column>
+          <Column dataField="employee_Name" caption="Manager Name / Nom Gestionnaire"></Column>
+          <Column dataField="product" caption="Brand / Produit"></Column>
+          <Column dataField="amount_Budget" dataType="number" caption="Manager Budget / Budget Gestionnaire"></Column>
+          <Column dataField="amount_Allocated" dataType="number" caption="Budget Allocated / Budget Alloué"></Column>
+          <Column dataField="amount_Left" dataType="number" caption="Left to Allocate / Budget Disponible à Allouer"></Column>
           
-          <Editing
+          {/* <Editing
               mode="row"
               allowUpdating={true}
               allowDeleting={true}
-              allowAdding={true} />
+              allowAdding={true} /> */}
 
           <MasterDetail enabled={true} component={DetailsComponent} />
         </DataGrid>
@@ -93,7 +92,7 @@ export class Budget extends Component {
         <hr />
 
         <div>
-          <BudgetReps />
+          {/* <BudgetReps /> */}
         </div>
       </div>
     );

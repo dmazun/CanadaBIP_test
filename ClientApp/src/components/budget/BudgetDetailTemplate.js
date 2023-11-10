@@ -2,38 +2,38 @@ import React, { Component } from "react";
 import CustomStore from 'devextreme/data/custom_store';
 import { DataGrid, Column, Editing } from "devextreme-react/data-grid";
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://localhost:7071/api/BudgetManagerDetail";
 
 class BudgetDetailTemplate extends Component {
   constructor(props) {
     super(props);
-    const brandId = this.props.data.data.key;
+    const managerId = this.props.data.data.key;
 
     this.state = {
       budgetData: new CustomStore({
         key: 'id',
-        onLoaded: (result) => this.showResult(result),
-        load: () => this.sendRequest(`${API_URL}/budget?brandId=${brandId}`),
-        insert: (values) => this.sendRequest(`${API_URL}/budget`, 'POST', JSON.stringify({brandId: brandId, ...values})),
-        update: (key, values) => this.sendRequest(`${API_URL}/budget/${key}`, 'PATCH', JSON.stringify(values)),
-        remove: (key) => this.sendRequest(`${API_URL}/budget/${key}`, 'DELETE', null),
+        // onLoaded: (result) => this.showResult(result),
+        load: () => this.sendRequest(`${API_URL}/ByManager/${managerId}`),
+        // insert: (values) => this.sendRequest(`${API_URL}/budget`, 'POST', JSON.stringify({brandId: managerId, ...values})),
+        // update: (key, values) => this.sendRequest(`${API_URL}/budget/${key}`, 'PATCH', JSON.stringify(values)),
+        // remove: (key) => this.sendRequest(`${API_URL}/budget/${key}`, 'DELETE', null),
       }),
-      budgetValue: {id: null, sum: 0},
+      // budgetValue: {id: null, sum: 0},
     };  
     
-    this.onInitNewRow = this.onInitNewRow.bind(this);
+    // this.onInitNewRow = this.onInitNewRow.bind(this);
   }
 
-  showResult(result) {
-    const budgetValue = {
-      id: this.props.data.data.key,
-      sum: result?.reduce((acc, val) => acc + val.amount, 0)
-    };
+  // showResult(result) {
+  //   const budgetValue = {
+  //     id: this.props.data.data.key,
+  //     sum: result?.reduce((acc, val) => acc + val.amount, 0)
+  //   };
 
-    console.log('budgetValue', budgetValue);
-    this.setState(() => {return {budgetValue}});
-    this.props.setBudget(budgetValue)
-  }
+  //   console.log('budgetValue', budgetValue);
+  //   this.setState(() => {return {budgetValue}});
+  //   this.props.setBudget(budgetValue)
+  // }
 
   sendRequest(url, method = 'GET', data = {}) {
     if (method === 'GET') {
@@ -56,31 +56,22 @@ class BudgetDetailTemplate extends Component {
       });
     });
   }
-
-  onInitNewRow(e) {
-    e.data.amount = 0;
-    e.data.date = new Date();
-  }
   
   render() {
-    const { budgetData, budgetValue } = this.state;
-
+    const { budgetData } = this.state;
     return (
       <React.Fragment>
-        <p>SUM = {budgetValue.id}: {budgetValue.sum} </p>
+        <DataGrid dataSource={budgetData}>            
+          <Column dataField="date_Entry" dataType="date" format="MM/dd/yyyy" caption="Date of Entry"></Column>
+          <Column dataField="type" caption="Type"></Column>
+          <Column dataField="amount_Budget" dataType="number" caption="Manager Budget / Budget Gestionnaire"></Column>
+          <Column dataField="comment" caption="Comment"></Column>
 
-        <DataGrid dataSource={budgetData}
-          onInitNewRow={this.onInitNewRow}>
-            
-          <Column dataField="date" dataType="date"></Column>
-          <Column dataField="type"></Column>
-          <Column dataField="amount" dataType="number"></Column>
-
-          <Editing
+          {/* <Editing
               mode="row"
               allowUpdating={true}
               allowDeleting={true}
-              allowAdding={true} />
+              allowAdding={true} /> */}
         </DataGrid>
       </React.Fragment>
     );
