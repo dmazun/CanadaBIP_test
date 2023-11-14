@@ -15,14 +15,17 @@ class BudgetDetailTemplate extends Component {
         // onLoaded: (result) => this.showResult(result),
         load: () => this.sendRequest(`${API_URL}/ByManager/${managerId}`),
         insert: (values) => this.sendRequest(`${API_URL}`, 'POST', JSON.stringify({budget_Manager_ID: managerId, ...values})),
-        update: (key, values) => this.sendRequest(`${API_URL}/${key}`, 'PATCH', JSON.stringify(values)),
+        update: (key, values) => this.sendRequest(`${API_URL}/${key}`, 'PUT', JSON.stringify({...this.state.editingRowData, ...values})),
         remove: (key) => this.sendRequest(`${API_URL}/${key}`, 'DELETE', null),
       }),
+      editingRowData: {}
       // budgetValue: {id: null, sum: 0},
     };  
     
     // this.onInitNewRow = this.onInitNewRow.bind(this);
   }
+
+  onEditingStart = (e) => this.setState({ editingRowData: e.data });
 
   // showResult(result) {
   //   const budgetValue = {
@@ -62,7 +65,8 @@ class BudgetDetailTemplate extends Component {
     const { budgetData } = this.state;
     return (
       <React.Fragment>
-        <DataGrid dataSource={budgetData}>            
+        <DataGrid dataSource={budgetData}
+                  onEditingStart={this.onEditingStart}>            
           <Column dataField="date_Entry" dataType="date" format="MM/dd/yyyy" caption="Date of Entry"></Column>
           <Column dataField="type" caption="Type"></Column>
           <Column dataField="amount_Budget" dataType="number" caption="Manager Budget / Budget Gestionnaire"></Column>
