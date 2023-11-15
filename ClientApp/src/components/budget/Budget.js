@@ -25,6 +25,8 @@ export class Budget extends Component {
         // remove: (key) => this.sendRequest(`${API_URL}/${key}`, 'DELETE', null),
       }),
     };
+    
+    this.handleBudgetDetailsUpdate = this.handleBudgetDetailsUpdate.bind(this);
   }
 
   sendRequest(url, method = 'GET', data = {}) {
@@ -49,20 +51,15 @@ export class Budget extends Component {
     });
   }
 
-  handleBudgetUpdate(e) {
-    // console.log('e: ', e);
-  }
-
-  getBrandBudgetTotal(data) {
-    // console.log('dd', data)
-    return data.budget
+  handleBudgetDetailsUpdate() {
+    this.dataGrid.instance.refresh(true);    
   }
 
   render() {
     const { brandsData } = this.state;
     
     const DetailsComponent = (e) => {
-      return <BudgetDetailTemplate data={e} setBudget={this.handleBudgetUpdate}/>;
+      return <BudgetDetailTemplate data={e} budgetDetailsUpdated={this.handleBudgetDetailsUpdate}/>;
     };
 
     return (
@@ -71,7 +68,8 @@ export class Budget extends Component {
         <h2>Brand Level Budget</h2>
 
         <DataGrid id="grid-container" 
-                  dataSource={brandsData} >
+                  dataSource={brandsData}
+                  ref={ref => this.dataGrid = ref}>
 
           <Column dataField="sales_Area_Name" caption="Manager Territory Name/Nom territoire Gestionnaire"></Column>
           <Column dataField="employee_Name" caption="Manager Name / Nom Gestionnaire"></Column>

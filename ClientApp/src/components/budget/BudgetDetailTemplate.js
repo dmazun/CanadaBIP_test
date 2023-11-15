@@ -12,31 +12,17 @@ class BudgetDetailTemplate extends Component {
     this.state = {
       budgetData: new CustomStore({
         key: 'id',
-        // onLoaded: (result) => this.showResult(result),
+        onModified: () => this.props.budgetDetailsUpdated(),
         load: () => this.sendRequest(`${API_URL}/ByManager/${managerId}`),
         insert: (values) => this.sendRequest(`${API_URL}`, 'POST', JSON.stringify({budget_Manager_ID: managerId, ...values})),
         update: (key, values) => this.sendRequest(`${API_URL}/${key}`, 'PUT', JSON.stringify({...this.state.editingRowData, ...values})),
         remove: (key) => this.sendRequest(`${API_URL}/${key}`, 'DELETE', null),
       }),
       editingRowData: {}
-      // budgetValue: {id: null, sum: 0},
     };  
-    
-    // this.onInitNewRow = this.onInitNewRow.bind(this);
   }
 
   onEditingStart = (e) => this.setState({ editingRowData: e.data });
-
-  // showResult(result) {
-  //   const budgetValue = {
-  //     id: this.props.data.data.key,
-  //     sum: result?.reduce((acc, val) => acc + val.amount, 0)
-  //   };
-
-  //   console.log('budgetValue', budgetValue);
-  //   this.setState(() => {return {budgetValue}});
-  //   this.props.setBudget(budgetValue)
-  // }
 
   sendRequest(url, method = 'GET', data = {}) {    
     console.log('data: ', data);
