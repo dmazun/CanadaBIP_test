@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import CustomStore from 'devextreme/data/custom_store';
-import { DataGrid, Column, Editing } from "devextreme-react/data-grid";
+import { DataGrid, Column, Editing, Lookup } from "devextreme-react/data-grid";
+import { budgetDetailTypes } from "./data";
 
 const API_URL = "https://localhost:7071/api/BudgetManagerDetail";
 
@@ -54,7 +55,9 @@ class BudgetDetailTemplate extends Component {
         <DataGrid dataSource={budgetData}
                   onEditingStart={this.onEditingStart}>            
           <Column dataField="date_Entry" dataType="date" format="MM/dd/yyyy" caption="Date of Entry"></Column>
-          <Column dataField="type" caption="Type"></Column>
+          <Column dataField="type" caption="Type">            
+            <Lookup dataSource={budgetDetailTypes} displayExpr="name" valueExpr="name" />
+          </Column>
           <Column dataField="amount_Budget" dataType="number" caption="Manager Budget / Budget Gestionnaire"></Column>
           <Column dataField="comment" caption="Comment"></Column>
 
