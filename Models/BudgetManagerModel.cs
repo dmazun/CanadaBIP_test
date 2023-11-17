@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CanadaBIP_test.Models
 {
@@ -43,5 +44,18 @@ namespace CanadaBIP_test.Models
         public DateTime? Changed { get; set; }
         public int? Is_BMD { get; set; }
         public int? Is_BMR { get; set; }
+    }
+
+    public class BudgetManagerEditModel
+    {
+        public int ID { get; set; }
+        public string? Int_Usr_ID { get; set; }
+        public string? Step { get; set; }
+        public string? BU { get; set; }
+        public string? Sales_Area_Code { get; set; }
+        public string? Product { get; set; }
+
+        [Column(TypeName = "decimal(25, 2)")]
+        public decimal? Amount_Budget { get; set; }       
     }
 }

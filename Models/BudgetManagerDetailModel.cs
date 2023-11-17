@@ -40,9 +40,9 @@ namespace CanadaBIP_test.Models
         public string? Comment { get; set; }
     }
 
-    [Keyless]
+   /* [Keyless]
     public class BudgetManagerDetailEditOut
     {
         public int Results { get; set; } = 0;
-    }
+    }*/
 }

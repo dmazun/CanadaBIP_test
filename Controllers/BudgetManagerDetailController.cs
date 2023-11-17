@@ -34,7 +34,7 @@ namespace CanadaBIP_test.Controllers
         public async Task Create(BudgetManagerDetailEditModel model)
         {
             string userId = "Dima";
-            using var cmd = _context.BudgetManagerDetailEditOut.CreateDbCommand();
+            using var cmd = _context.BudgetResult.CreateDbCommand();
             cmd.CommandText = "[budget].[sp_Update_Budget_Manager_Detail]";
             cmd.CommandType = CommandType.StoredProcedure;
 
@@ -64,7 +64,7 @@ namespace CanadaBIP_test.Controllers
         public async Task Update(int id, BudgetManagerDetailEditModel model)
         {
             string userId = "Dima";
-            using var cmd = _context.BudgetManagerDetailEditOut.CreateDbCommand();
+            using var cmd = _context.BudgetResult.CreateDbCommand();
             cmd.CommandText = "[budget].[sp_Update_Budget_Manager_Detail]";
             cmd.CommandType = CommandType.StoredProcedure;
 
@@ -94,7 +94,7 @@ namespace CanadaBIP_test.Controllers
         public async Task Delete(int id)
         {
             string userId = "Dima";
-            using var cmd = _context.BudgetManagerDetailEditOut.CreateDbCommand();
+            using var cmd = _context.BudgetResult.CreateDbCommand();
             cmd.CommandText = "[budget].[sp_Update_Budget_Manager_Detail]";
             cmd.CommandType = CommandType.StoredProcedure;
 

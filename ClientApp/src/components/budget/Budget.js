@@ -20,14 +20,17 @@ export class Budget extends Component {
       brandsData: new CustomStore({
         key: 'id',
         load: () => this.sendRequest(`${API_URL}`),
-        // insert: (values) => this.sendRequest(`${API_URL}`, 'POST', JSON.stringify(values)),
-        // update: (key, values) => this.sendRequest(`${API_URL}/${key}`, 'PATCH', JSON.stringify(values)),
-        // remove: (key) => this.sendRequest(`${API_URL}/${key}`, 'DELETE', null),
+        insert: (values) => this.sendRequest(`${API_URL}`, 'POST', JSON.stringify(values)),
+        update: (key, values) => this.sendRequest(`${API_URL}/${key}`, 'PUT', JSON.stringify({...this.state.editingRowData, ...values})),
+        remove: (key) => this.sendRequest(`${API_URL}/${key}`, 'DELETE', null),
       }),
+      editingRowData: {}
     };
     
     this.handleBudgetDetailsUpdate = this.handleBudgetDetailsUpdate.bind(this);
   }
+
+  onEditingStart = (e) => this.setState({ editingRowData: e.data });
 
   sendRequest(url, method = 'GET', data = {}) {
     if (method === 'GET') {
@@ -69,20 +72,23 @@ export class Budget extends Component {
 
         <DataGrid id="grid-container" 
                   dataSource={brandsData}
-                  ref={ref => this.dataGrid = ref}>
+                  ref={ref => this.dataGrid = ref}
+                  onEditingStart={this.onEditingStart}> 
 
-          <Column dataField="sales_Area_Name" caption="Manager Territory Name/Nom territoire Gestionnaire"></Column>
-          <Column dataField="employee_Name" caption="Manager Name / Nom Gestionnaire"></Column>
           <Column dataField="product" caption="Brand / Produit"></Column>
           <Column dataField="amount_Budget" dataType="number" caption="Manager Budget / Budget Gestionnaire"></Column>
-          <Column dataField="amount_Allocated" dataType="number" caption="Budget Allocated / Budget Alloué"></Column>
-          <Column dataField="amount_Left" dataType="number" caption="Left to Allocate / Budget Disponible à Allouer"></Column>
-          
-          {/* <Editing
+          <Column dataField="amount_Allocated" dataType="number" allowEditing={false}
+                  caption="Budget Allocated / Budget Alloué" >
+          </Column>
+          <Column dataField="amount_Left" dataType="number" allowEditing={false}
+                  caption="Left to Allocate / Budget Disponible à Allouer">
+          </Column>
+        
+          <Editing
               mode="row"
               allowUpdating={true}
               allowDeleting={true}
-              allowAdding={true} /> */}
+              allowAdding={true} />
 
           <MasterDetail enabled={true} component={DetailsComponent} />
         </DataGrid>
