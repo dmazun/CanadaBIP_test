@@ -5,6 +5,7 @@ import {
   Column,
   MasterDetail,
   Editing,
+  Lookup,
 } from "devextreme-react/data-grid";
 import CustomStore from 'devextreme/data/custom_store';
 import BudgetDetailTemplate from "./BudgetDetailTemplate";
@@ -24,13 +25,20 @@ export class Budget extends Component {
         update: (key, values) => this.sendRequest(`${API_URL}/${key}`, 'PUT', JSON.stringify({...this.state.editingRowData, ...values})),
         remove: (key) => this.sendRequest(`${API_URL}/${key}`, 'DELETE', null),
       }),
+      productsData: [],
       editingRowData: {}
     };
     
+    this.getProducts = this.getProducts.bind(this);
     this.handleBudgetDetailsUpdate = this.handleBudgetDetailsUpdate.bind(this);
+    this.getProductName = this.getProductName.bind(this);
+    this.allowUpdating = this.allowUpdating.bind(this);
   }
 
-  onEditingStart = (e) => this.setState({ editingRowData: e.data });
+  onEditingStart = (e) => {    
+    this.getProducts(e);
+    this.setState({editingRowData: e.data});
+  }
 
   sendRequest(url, method = 'GET', data = {}) {
     if (method === 'GET') {
@@ -54,16 +62,35 @@ export class Budget extends Component {
     });
   }
 
+  getProducts(editingRowData) {
+    this.sendRequest(`${API_URL}/Products`)
+    .then(products => {
+      return this.setState({
+        productsData: editingRowData.data.product
+          ? [{product: editingRowData.data.product}, ...products]
+          : products
+      });
+    })
+  }
+
   handleBudgetDetailsUpdate() {
     this.dataGrid.instance.refresh(true);    
   }
 
+  getProductName(rowData) {
+    return rowData.product
+  }
+
+  allowUpdating(e) {
+    return e.row.data.amount_Allocated === 0
+  }
+
   render() {
-    const { brandsData } = this.state;
+    const { brandsData, productsData } = this.state;
     
     const DetailsComponent = (e) => {
       return <BudgetDetailTemplate data={e} budgetDetailsUpdated={this.handleBudgetDetailsUpdate}/>;
-    };
+    };    
 
     return (
       <div>
@@ -73,9 +100,11 @@ export class Budget extends Component {
         <DataGrid id="grid-container" 
                   dataSource={brandsData}
                   ref={ref => this.dataGrid = ref}
+                  onInitNewRow={this.getProducts}
                   onEditingStart={this.onEditingStart}> 
-
-          <Column dataField="product" caption="Brand / Produit"></Column>
+          <Column dataField="product" caption="Brand / Produit" calculateDisplayValue={this.getProductName}>
+            <Lookup dataSource={productsData} displayExpr="product" valueExpr="product" />
+          </Column>
           <Column dataField="amount_Budget" dataType="number" caption="Manager Budget / Budget Gestionnaire"></Column>
           <Column dataField="amount_Allocated" dataType="number" allowEditing={false}
                   caption="Budget Allocated / Budget Alloué" >
@@ -86,7 +115,8 @@ export class Budget extends Component {
         
           <Editing
               mode="row"
-              allowUpdating={true}
+              useIcons={true}
+              allowUpdating={this.allowUpdating}
               allowDeleting={true}
               allowAdding={true} />
 

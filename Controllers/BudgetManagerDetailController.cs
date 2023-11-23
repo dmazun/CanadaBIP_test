@@ -47,7 +47,7 @@ namespace CanadaBIP_test.Controllers
             cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.Date) { Value = model.Date_Entry });
             cmd.Parameters.Add(new SqlParameter("@Type", SqlDbType.NVarChar) { Value = model.Type });
             cmd.Parameters.Add(new SqlParameter("@Amount_Budget", SqlDbType.Decimal) { Value = model.Amount_Budget });
-            cmd.Parameters.Add(new SqlParameter("@Comment", SqlDbType.NVarChar) { Value = model.Comment });
+            cmd.Parameters.Add(new SqlParameter("@Comment", SqlDbType.NVarChar) { Value = model.Comment ?? ""});
 
             SqlParameter outputParameter = new SqlParameter
             {

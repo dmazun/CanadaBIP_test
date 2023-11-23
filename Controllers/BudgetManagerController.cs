@@ -14,40 +14,46 @@ namespace CanadaBIP_test.Controllers
         private readonly BudgetDbContext _context;
         private readonly User _user;
 
-        public BudgetManagerController(BudgetDbContext context)            
+        public BudgetManagerController(BudgetDbContext context)
         {
             _context = context;
 
             _user = new User()
             {
                 ID = 3,
-                UserName = "Dima",
+                UserName = "Jacinthe.Lamarche@pfizer.com",
                 RoleName = "District",
-                BU = "PBGH",
-                BU_NAME = "PBG Hospital",
+                BU = "PBGO",
+                BU_NAME = "PBG Oncology",
                 Sales_Area_Type = "District",
-                Sales_Area_Code = "CA_10004",
-                Sales_Area_Name = "H_RBM_WEST",
+                Sales_Area_Code = "CA_40005",
+                Sales_Area_Name = "O_RBM_QUEBEC",
             };
         }
 
         [HttpGet]
-        public List<BudgetManagerViewModel> Get()
+        public IActionResult Get()
         {
-            return _context.BudgetManager.ToList();
+            List<BudgetManagerViewModel> result = _context.BudgetManager
+                .Where(x => x.Sales_Area_Code == _user.Sales_Area_Code)
+                .ToList();
+
+            return Ok(result);
         }
 
-        [HttpGet("{id}")]
-        public BudgetManagerViewModel Get(int id)
+        [HttpGet("Products")]
+        public IActionResult GetProductsByAreaCode()
         {
-            return _context.BudgetManager.FirstOrDefault(x => x.ID == id);
+            List<BMProductModel> result = _context.BMProduct
+                .Where(x => x.Sales_Area_Code == _user.Sales_Area_Code)
+                .ToList();
+
+            return Ok(result);
         }
 
         [HttpPost]
         public async Task Create(BudgetManagerEditModel model)
         {
-            string tempProduct = "MYLOTARG";
-
             using var cmd = _context.BudgetResult.CreateDbCommand();
             cmd.CommandText = "[budget].[sp_Update_Budget_Manager]";
             cmd.CommandType = CommandType.StoredProcedure;
@@ -59,8 +65,7 @@ namespace CanadaBIP_test.Controllers
             cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = _context.BudgetManager.Count() });
             cmd.Parameters.Add(new SqlParameter("@BU", SqlDbType.NVarChar) { Value = _user.BU });
             cmd.Parameters.Add(new SqlParameter("@Sales_Area_Code", SqlDbType.NVarChar) { Value = _user.Sales_Area_Code });
-        //    cmd.Parameters.Add(new SqlParameter("@Product", SqlDbType.NVarChar) { Value = model.Product });
-            cmd.Parameters.Add(new SqlParameter("@Product", SqlDbType.NVarChar) { Value = tempProduct });
+            cmd.Parameters.Add(new SqlParameter("@Product", SqlDbType.NVarChar) { Value = model.Product });
             cmd.Parameters.Add(new SqlParameter("@Amount_Budget", SqlDbType.Decimal) { Value = model.Amount_Budget });
 
             SqlParameter outputParameter = new SqlParameter
@@ -116,7 +121,7 @@ namespace CanadaBIP_test.Controllers
             cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = id });
             cmd.Parameters.Add(new SqlParameter("@BU", SqlDbType.NVarChar) { Value = "" });
             cmd.Parameters.Add(new SqlParameter("@Sales_Area_Code", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Product", SqlDbType.NVarChar) { Value ="" });
+            cmd.Parameters.Add(new SqlParameter("@Product", SqlDbType.NVarChar) { Value = "" });
             cmd.Parameters.Add(new SqlParameter("@Amount_Budget", SqlDbType.Decimal) { Value = 0 });
 
             SqlParameter outputParameter = new SqlParameter
