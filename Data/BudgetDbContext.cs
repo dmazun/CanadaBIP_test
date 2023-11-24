@@ -12,5 +12,6 @@ namespace CanadaBIP_test.Data
         public DbSet<BudgetManagerDetailViewModel> BudgetManagerDetail { get; set; }
         public DbSet<BudgetManagerDetailEditModel> BudgetManagerDetailEdit { get; set; }
         public DbSet<BudgetResult> BudgetResult { get; set; }
+        public DbSet<BMRepresentativeViewModel> BMRepresentative { get; set; }
     }
 }
