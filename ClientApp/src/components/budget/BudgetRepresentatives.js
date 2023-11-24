@@ -7,19 +7,19 @@ import {
 } from "devextreme-react/data-grid";
 import CustomStore from 'devextreme/data/custom_store';
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://localhost:7071/api/BudgetManagerRepresentative";
 
-export class BudgetReps extends Component {
+export class BudgetRepresentatives extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       brandsData: new CustomStore({
         key: 'id',
-        load: () => this.sendRequest(`${API_URL}/brandsManagerRep`),
-        insert: (values) => this.sendRequest(`${API_URL}/brandsManagerRep`, 'POST', JSON.stringify(values)),
-        update: (key, values) => this.sendRequest(`${API_URL}/brandsManagerRep/${key}`, 'PATCH', JSON.stringify(values)),
-        remove: (key) => this.sendRequest(`${API_URL}/brandsManagerRep/${key}`, 'DELETE', null),
+        load: () => this.sendRequest(`${API_URL}`),
+        // insert: (values) => this.sendRequest(`${API_URL}/brandsManagerRep`, 'POST', JSON.stringify(values)),
+        // update: (key, values) => this.sendRequest(`${API_URL}/brandsManagerRep/${key}`, 'PATCH', JSON.stringify(values)),
+        // remove: (key) => this.sendRequest(`${API_URL}/brandsManagerRep/${key}`, 'DELETE', null),
       }),
     };    
   }
@@ -56,19 +56,31 @@ export class BudgetReps extends Component {
         <DataGrid id="grid-container" 
           dataSource={brandsData} >
 
-          <Column dataField="brand_name" caption="Brand / Produit"></Column>
-          <Column dataField="rep_name" caption="Rep Name/ Nom représentant"></Column>
-          <Column dataField="date" dataType="date" 
-                  caption="Date of Entry/Date de l'allocation"></Column>
+          <Column dataField="product" caption="Brand/ Produit"></Column>
+          <Column dataField="rep_Employee_Name" caption="Rep Rep Name/ Nom Représentant"></Column>
+          <Column dataField="date_Entry" dataType="date" 
+                  caption="Date of Entry/ Date de l'entrée"></Column>
           <Column
-            dataField="budget"
+            dataField="amount_Budget"
             dataType="number"
-            caption="Manager Budget/Budget Gestionnaire"
-            calculateCellValue={this.getBrandBudgetTotal}
+            allowEditing={false}
+            caption="Manager Budget/ Budget Gestionnaire"
+          ></Column>
+          <Column
+            dataField="amount_Allocated"
+            dataType="number"
+            caption="Budget Allocated/ Budget Alloué"
+          ></Column>
+          <Column
+            dataField="amount_Left"
+            dataType="number"
+            allowEditing={false}
+            caption="Remaining To Be Allocated/ Budget Disponible à Allouer"
           ></Column>
           
           <Editing
               mode="row"
+              useIcons={true}
               allowUpdating={true}
               allowDeleting={true}
               allowAdding={true} />

@@ -9,7 +9,7 @@ import {
 } from "devextreme-react/data-grid";
 import CustomStore from 'devextreme/data/custom_store';
 import BudgetDetailTemplate from "./BudgetDetailTemplate";
-import { BudgetReps } from "./BudgetReps";
+import { BudgetRepresentatives } from "./BudgetRepresentatives";
 
 const API_URL = "https://localhost:7071/api/BudgetManager";
 
@@ -126,7 +126,7 @@ export class Budget extends Component {
         <hr />
 
         <div>
-          {/* <BudgetReps /> */}
+          <BudgetRepresentatives />
         </div>
       </div>
     );
