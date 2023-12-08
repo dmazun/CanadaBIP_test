@@ -63,4 +63,40 @@ namespace CanadaBIP_test.Models
         public int? Is_BR { get; set; }
         public int? Is_Expired { get; set; }
     }
+
+    public class BMRepresentativeEditModel
+    {
+        public int ID { get; set; }
+        public string? Int_Usr_ID { get; set; }
+        public string? Step { get; set; }
+        public string? BU { get; set; }
+        public string? Manager_Sales_Area_Code { get; set; }
+        public string? Sales_Area_Code { get; set; }
+        public DateTime? Date_Entry { get; set; }
+        public string? Product { get; set; }
+
+        [Column(TypeName = "decimal(25, 2)")]
+        public decimal? Amount_Allocated { get; set; }
+    }
+
+    [Table("V_Budget_BMR_Combobox_Product", Schema = "budget")]
+    public class BMRepProductModel
+    {
+        public int ID { get; set; }
+        public string Sales_Area_Code { get; set; }
+        public string Product { get; set; }
+    }
+
+    [Table("V_Budget_BMR_Combobox_RepNames", Schema = "budget")]
+    public class BMRepNameModel
+    {
+        public int ID { get; set; }
+        public string? Sales_Area_Code { get; set; }
+        public string? Sales_Area_Name { get; set; }
+        public string? Parent_Sales_Area_Code { get; set; }
+        public string? Employee_Name { get; set; }
+        public string? Employee_ID { get; set; }
+        public string? Email_Address { get; set; }
+        public string Product { get; set; }
+    }
 }

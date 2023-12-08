@@ -4,8 +4,10 @@ import {
   DataGrid,
   Column,
   Editing,
+  Lookup,
 } from "devextreme-react/data-grid";
 import CustomStore from 'devextreme/data/custom_store';
+import { BudgetRepSelectComponent } from "./BudgetRepSelectComponent";
 
 const API_URL = "https://localhost:7071/api/BudgetManagerRepresentative";
 
@@ -17,11 +19,28 @@ export class BudgetRepresentatives extends Component {
       brandsData: new CustomStore({
         key: 'id',
         load: () => this.sendRequest(`${API_URL}`),
-        // insert: (values) => this.sendRequest(`${API_URL}/brandsManagerRep`, 'POST', JSON.stringify(values)),
-        // update: (key, values) => this.sendRequest(`${API_URL}/brandsManagerRep/${key}`, 'PATCH', JSON.stringify(values)),
-        // remove: (key) => this.sendRequest(`${API_URL}/brandsManagerRep/${key}`, 'DELETE', null),
+        insert: (values) => this.sendRequest(`${API_URL}`, 'POST', JSON.stringify(values)),
+        update: (key, values) => this.sendRequest(`${API_URL}/${key}`, 'PUT', 
+          JSON.stringify({
+            ...{
+              sales_Area_Code: this.state.editingRowData.rep_Sales_Area_Code,
+              date_Entry: this.state.editingRowData.date_Entry,
+              product: this.state.editingRowData.product,
+              amount_Allocated: this.state.editingRowData.amount_Allocated
+            },
+            ...values
+          })),
+        // remove: (key) => this.sendRequest(`${API_URL}/${key}`, 'DELETE', null),
       }),
+      productsData: [],
+      repNamesData: [],
+      editingRowData: {}
     };    
+  }
+
+  componentDidMount() {
+    this.getProducts();
+    this.getRepNames();
   }
 
   sendRequest(url, method = 'GET', data = {}) {
@@ -46,43 +65,95 @@ export class BudgetRepresentatives extends Component {
     });
   }
 
+  getProducts() {
+    this.sendRequest(`${API_URL}/Products`)
+    .then(products => this.setState({ productsData: products }));
+  }
+
+  getRepNames() {
+    this.sendRequest(`${API_URL}/RepNames`)
+      .then(res => this.setState({ repNamesData: res }));
+  }
+
+  onEditingStart = (e) => {
+    this.setState({editingRowData: e.data});
+  }
+  
+  getProductName(rowData) {
+    return rowData.product
+  }
+   
+  calculateRepName(rowData) {
+    return rowData.rep_Employee_Name
+  }
+   
+  calculateRepAreaCode(rowData) {
+    return rowData.rep_Sales_Area_Code
+  }
+
+  setProductValue(rowData, value) {
+    this.defaultSetCellValue(rowData, value);    
+  }
+
   render() {
-    const { brandsData } = this.state;
+    const { brandsData, productsData, repNamesData } = this.state;
 
     return (
       <div>
         <h2>Budget Allocation to Representatives</h2>
 
         <DataGrid id="grid-container" 
-          dataSource={brandsData} >
+                  dataSource={brandsData}
+                  onEditingStart={this.onEditingStart}>
 
-          <Column dataField="product" caption="Brand/ Produit"></Column>
-          <Column dataField="rep_Employee_Name" caption="Rep Rep Name/ Nom Représentant"></Column>
-          <Column dataField="date_Entry" dataType="date" 
-                  caption="Date of Entry/ Date de l'entrée"></Column>
+          <Column dataField="product" caption="Brand/ Produit" 
+                  setCellValue={this.setProductValue}
+                  calculateDisplayValue={this.getProductName} >
+            <Lookup dataSource={productsData} 
+                    displayExpr="product" 
+                    valueExpr="product" />
+          </Column>
+
+          <Column dataField="sales_Area_Code" 
+                  caption="Rep Name/ Nom Représentant"
+                  calculateCellValue={this.calculateRepAreaCode}
+                  calculateDisplayValue={this.calculateRepName}
+                  editCellComponent={BudgetRepSelectComponent}>
+            <Lookup dataSource={repNamesData} 
+                    calculateDisplayValue={this.calculateRepName}
+                    valueExpr="sales_Area_Code"/>
+          </Column>
+
+          <Column dataField="date_Entry" 
+                  dataType="date" 
+                  caption="Date of Entry/ Date de l'entrée">
+          </Column>
+
           <Column
             dataField="amount_Budget"
             dataType="number"
             allowEditing={false}
-            caption="Manager Budget/ Budget Gestionnaire"
-          ></Column>
+            caption="Manager Budget/ Budget Gestionnaire">
+          </Column>
+
           <Column
             dataField="amount_Allocated"
             dataType="number"
-            caption="Budget Allocated/ Budget Alloué"
-          ></Column>
+            caption="Budget Allocated/ Budget Alloué">
+          </Column>
+
           <Column
             dataField="amount_Left"
             dataType="number"
             allowEditing={false}
-            caption="Remaining To Be Allocated/ Budget Disponible à Allouer"
-          ></Column>
+            caption="Remaining To Be Allocated/ Budget Disponible à Allouer">
+          </Column>
           
           <Editing
               mode="row"
               useIcons={true}
               allowUpdating={true}
-              allowDeleting={true}
+             // allowDeleting={true}
               allowAdding={true} />
         </DataGrid>
       </div>
