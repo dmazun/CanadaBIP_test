@@ -81,6 +81,12 @@ export class BudgetRepresentatives extends Component {
   onEditingStart = (e) => {
     this.setState({editingRowData: e.data});
   }
+
+  onEditorPreparing = (e) => {
+    if (e.dataField === "product") {
+      e.editorOptions.disabled = e.row.data && e.row.data.is_BR === 1;
+    }
+  }
   
   getProductName(rowData) {
     return rowData.product
@@ -108,9 +114,10 @@ export class BudgetRepresentatives extends Component {
 
         <DataGrid id="grid-container" 
                   dataSource={brandsData}
+                  onEditorPreparing={this.onEditorPreparing}
                   onEditingStart={this.onEditingStart}>
 
-          <Column dataField="product" caption="Brand/ Produit" 
+          <Column dataField="product" caption="Brand/ Produit"
                   setCellValue={this.setProductValue}
                   calculateDisplayValue={this.getProductName} >
             <Lookup dataSource={productsData} 

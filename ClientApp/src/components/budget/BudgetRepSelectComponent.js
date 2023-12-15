@@ -55,7 +55,7 @@ export class BudgetRepSelectComponent extends Component {
         hoverStateEnabled={true}
         onSelectionChanged={this.onSelectionChanged}
         focusedRowEnabled={true}
-        defaultFocusedRowKey={this.state.selectedRowKeys}
+        defaultFocusedRowKey={this.state.selectedRowKeys}  
       >
         <Column dataField="employee_Name" caption="Rep Name" />
         <Column dataField="sales_Area_Name" caption="Territory Name" />
@@ -88,6 +88,7 @@ export class BudgetRepSelectComponent extends Component {
         value={this.state.selectedRowKeys}
         displayExpr="employee_Name"
         valueExpr="sales_Area_Code"
+        disabled={this.props.data.row.data.is_BR === 1 ? true : false}
         contentRender={this.contentRender}>
       </DropDownBox>
     );
