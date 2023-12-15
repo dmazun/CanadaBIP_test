@@ -19,7 +19,7 @@ export class BudgetRepresentatives extends Component {
       brandsData: new CustomStore({
         key: 'id',
         load: () => this.sendRequest(`${API_URL}`),
-        insert: (values) => this.sendRequest(`${API_URL}`, 'POST', JSON.stringify(values)),
+        insert: (values) => this.sendRequest(`${API_URL}`, 'POST', JSON.stringify(values)).then(() => this.getRepNames()),
         update: (key, values) => this.sendRequest(`${API_URL}/${key}`, 'PUT', 
           JSON.stringify({
             ...{
@@ -29,7 +29,7 @@ export class BudgetRepresentatives extends Component {
               amount_Allocated: this.state.editingRowData.amount_Allocated
             },
             ...values
-          })),
+          })).then(() => this.getRepNames())
         // remove: (key) => this.sendRequest(`${API_URL}/${key}`, 'DELETE', null),
       }),
       productsData: [],
@@ -92,6 +92,7 @@ export class BudgetRepresentatives extends Component {
   }
 
   setProductValue(rowData, value) {
+    rowData.rep_Sales_Area_Code = null;
     this.defaultSetCellValue(rowData, value);    
   }
 
