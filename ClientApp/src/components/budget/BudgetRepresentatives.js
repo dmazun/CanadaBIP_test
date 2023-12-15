@@ -19,7 +19,8 @@ export class BudgetRepresentatives extends Component {
       brandsData: new CustomStore({
         key: 'id',
         load: () => this.sendRequest(`${API_URL}`),
-        insert: (values) => this.sendRequest(`${API_URL}`, 'POST', JSON.stringify(values)).then(() => this.getRepNames()),
+        insert: (values) => this.sendRequest(`${API_URL}`, 'POST', JSON.stringify(values))
+          .then(() => this.getRepNames()),
         update: (key, values) => this.sendRequest(`${API_URL}/${key}`, 'PUT', 
           JSON.stringify({
             ...{
@@ -29,8 +30,10 @@ export class BudgetRepresentatives extends Component {
               amount_Allocated: this.state.editingRowData.amount_Allocated
             },
             ...values
-          })).then(() => this.getRepNames())
-        // remove: (key) => this.sendRequest(`${API_URL}/${key}`, 'DELETE', null),
+          }))
+          .then(() => this.getRepNames()),
+        remove: (key) => this.sendRequest(`${API_URL}/${key}`, 'DELETE', null)
+          .then(() => this.getRepNames())
       }),
       productsData: [],
       repNamesData: [],
@@ -154,7 +157,7 @@ export class BudgetRepresentatives extends Component {
               mode="row"
               useIcons={true}
               allowUpdating={true}
-             // allowDeleting={true}
+              allowDeleting={true}
               allowAdding={true} />
         </DataGrid>
       </div>
