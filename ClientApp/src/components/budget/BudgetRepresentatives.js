@@ -5,6 +5,8 @@ import {
   Column,
   Editing,
   Lookup,
+  Summary,
+  TotalItem,
 } from "devextreme-react/data-grid";
 import CustomStore from 'devextreme/data/custom_store';
 import { BudgetRepSelectComponent } from "./BudgetRepSelectComponent";
@@ -159,6 +161,11 @@ export class BudgetRepresentatives extends Component {
             allowEditing={false}
             caption="Remaining To Be Allocated/ Budget Disponible à Allouer">
           </Column>
+
+          <Summary>
+            <TotalItem column="date_Entry" summaryType="custom" displayFormat="TOTAL:"/>
+            <TotalItem column="amount_Allocated" summaryType="sum" valueFormat="currency" displayFormat="{0}"/>
+          </Summary>
           
           <Editing
               mode="row"

@@ -6,6 +6,8 @@ import {
   MasterDetail,
   Editing,
   Lookup,
+  Summary,
+  TotalItem,
 } from "devextreme-react/data-grid";
 import CustomStore from 'devextreme/data/custom_store';
 import BudgetDetailTemplate from "./BudgetDetailTemplate";
@@ -97,28 +99,35 @@ export class Budget extends Component {
         <h1>Budget</h1>
         <h2>Brand Level Budget</h2>
 
-        <DataGrid id="grid-container" 
-                  dataSource={brandsData}
-                  ref={ref => this.dataGrid = ref}
-                  onInitNewRow={this.getProducts}
-                  onEditingStart={this.onEditingStart}> 
+        <DataGrid id="grid-container"
+          dataSource={brandsData}
+          ref={ref => this.dataGrid = ref}
+          onInitNewRow={this.getProducts}
+          onEditingStart={this.onEditingStart}>
           <Column dataField="product" caption="Brand / Produit" calculateDisplayValue={this.getProductName}>
             <Lookup dataSource={productsData} displayExpr="product" valueExpr="product" />
           </Column>
           <Column dataField="amount_Budget" dataType="number" caption="Manager Budget / Budget Gestionnaire"></Column>
           <Column dataField="amount_Allocated" dataType="number" allowEditing={false}
-                  caption="Budget Allocated / Budget Alloué" >
+            caption="Budget Allocated / Budget Alloué" >
           </Column>
           <Column dataField="amount_Left" dataType="number" allowEditing={false}
-                  caption="Left to Allocate / Budget Disponible à Allouer">
+            caption="Left to Allocate / Budget Disponible à Allouer">
           </Column>
-        
+
+          <Summary>
+            <TotalItem column="product" summaryType="custom" displayFormat="TOTAL:"/>
+            <TotalItem column="amount_Budget" summaryType="sum" valueFormat="currency" displayFormat="{0}"/>
+            <TotalItem column="amount_Allocated" summaryType="sum" valueFormat="currency" displayFormat="{0}"/>
+            <TotalItem column="amount_Left" summaryType="sum" valueFormat="currency" displayFormat="{0}"/>
+          </Summary>
+
           <Editing
-              mode="row"
-              useIcons={true}
-              allowUpdating={this.allowUpdating}
-              allowDeleting={true}
-              allowAdding={true} />
+            mode="row"
+            useIcons={true}
+            allowUpdating={this.allowUpdating}
+            allowDeleting={true}
+            allowAdding={true} />
 
           <MasterDetail enabled={true} component={DetailsComponent} />
         </DataGrid>
