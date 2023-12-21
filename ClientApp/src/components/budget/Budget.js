@@ -8,6 +8,8 @@ import {
   Lookup,
   Summary,
   TotalItem,
+  Toolbar, 
+  Item,
 } from "devextreme-react/data-grid";
 import CustomStore from 'devextreme/data/custom_store';
 import BudgetDetailTemplate from "./BudgetDetailTemplate";
@@ -30,7 +32,7 @@ export class Budget extends Component {
       productsData: [],
       editingRowData: {}
     };
-    
+     
     this.getProducts = this.getProducts.bind(this);
     this.handleBudgetDetailsUpdate = this.handleBudgetDetailsUpdate.bind(this);
     this.getProductName = this.getProductName.bind(this);
@@ -107,16 +109,20 @@ export class Budget extends Component {
           <Column dataField="product" caption="Brand / Produit" calculateDisplayValue={this.getProductName}>
             <Lookup dataSource={productsData} displayExpr="product" valueExpr="product" />
           </Column>
-          <Column dataField="amount_Budget" dataType="number" caption="Manager Budget / Budget Gestionnaire"></Column>
-          <Column dataField="amount_Allocated" dataType="number" allowEditing={false}
+          <Column dataField="amount_Budget" dataType="number" caption="Manager Budget / Budget Gestionnaire" format="currency"></Column>
+          <Column dataField="amount_Allocated" dataType="number" allowEditing={false} format="currency"
             caption="Budget Allocated / Budget Alloué" >
           </Column>
-          <Column dataField="amount_Left" dataType="number" allowEditing={false}
+          <Column dataField="amount_Left" dataType="number" allowEditing={false} format="currency"
             caption="Left to Allocate / Budget Disponible à Allouer">
           </Column>
 
+          <Toolbar>
+            <Item name="addRowButton" />
+          </Toolbar>
+
           <Summary>
-            <TotalItem column="product" summaryType="custom" displayFormat="TOTAL:"/>
+            <TotalItem column="product" displayFormat="TOTAL:"/>
             <TotalItem column="amount_Budget" summaryType="sum" valueFormat="currency" displayFormat="{0}"/>
             <TotalItem column="amount_Allocated" summaryType="sum" valueFormat="currency" displayFormat="{0}"/>
             <TotalItem column="amount_Left" summaryType="sum" valueFormat="currency" displayFormat="{0}"/>
