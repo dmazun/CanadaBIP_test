@@ -9,8 +9,12 @@ import {
   TotalItem,
   Toolbar, 
   Item,
+  Export,
 } from "devextreme-react/data-grid";
 import CustomStore from 'devextreme/data/custom_store';
+import { Workbook } from 'exceljs';
+import saveAs from 'file-saver';
+import { exportDataGrid } from 'devextreme/excel_exporter';
 import { BudgetRepSelectComponent } from "./BudgetRepSelectComponent";
 
 const API_URL = "https://localhost:7071/api/BudgetManagerRepresentative";
@@ -109,6 +113,30 @@ export class BudgetRepresentatives extends Component {
     this.defaultSetCellValue(rowData, value);    
   }
 
+  onExporting(e) {
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet('Sheet');
+    exportDataGrid({
+        component: e.component,
+        worksheet: worksheet,
+        customizeCell: function(options) {
+            options.excelCell.font = { name: 'Arial', size: 12 };
+            options.excelCell.alignment = { horizontal: 'left' };
+        } 
+    }).then(function() {
+        workbook.xlsx.writeBuffer()
+          .then(function(buffer) {
+            const title = 'Export_BudgetAllocationRepresentatives_Summary';
+            const date = new Date(Date.now());
+            const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+            const time = `${date.getHours()}_${date.getMinutes()}`;
+            const filename = `${title}_${dateString}_${time}.xlsx`
+            
+            saveAs(new Blob([buffer], { type: 'application/octet-stream' }), filename);
+          });
+    });
+  }
+
   render() {
     const { brandsData, productsData, repNamesData } = this.state;
 
@@ -119,7 +147,10 @@ export class BudgetRepresentatives extends Component {
         <DataGrid id="grid-container" 
                   dataSource={brandsData}
                   onEditorPreparing={this.onEditorPreparing}
+                  onExporting={this.onExporting}
                   onEditingStart={this.onEditingStart}>
+
+          <Export enabled={true} />
 
           <Column dataField="product" caption="Brand/ Produit"
                   setCellValue={this.setProductValue}
@@ -169,6 +200,7 @@ export class BudgetRepresentatives extends Component {
 
           <Toolbar>
             <Item name="addRowButton" />
+            <Item name="exportButton" />
           </Toolbar>
 
           <Summary>

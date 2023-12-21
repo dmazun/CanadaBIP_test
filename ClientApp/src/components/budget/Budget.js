@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "devextreme/dist/css/dx.light.css";
 import {
-  DataGrid,
+  DataGrid, 
   Column,
   MasterDetail,
   Editing,
@@ -10,8 +10,12 @@ import {
   TotalItem,
   Toolbar, 
   Item,
+  Export,
 } from "devextreme-react/data-grid";
 import CustomStore from 'devextreme/data/custom_store';
+import { Workbook } from 'exceljs';
+import saveAs from 'file-saver';
+import { exportDataGrid } from 'devextreme/excel_exporter';
 import BudgetDetailTemplate from "./BudgetDetailTemplate";
 import { BudgetRepresentatives } from "./BudgetRepresentatives";
 
@@ -89,6 +93,30 @@ export class Budget extends Component {
     return e.row.data.amount_Allocated === 0
   }
 
+  onExporting(e) {
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet('Sheet');
+    exportDataGrid({
+        component: e.component,
+        worksheet: worksheet,
+        customizeCell: function(options) {
+            options.excelCell.font = { name: 'Arial', size: 12 };
+            options.excelCell.alignment = { horizontal: 'left' };
+        } 
+    }).then(function() {
+        workbook.xlsx.writeBuffer()
+          .then(function(buffer) {
+            const title = 'Export_BudgetManager_Summary';
+            const date = new Date(Date.now());
+            const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+            const time = `${date.getHours()}_${date.getMinutes()}`;
+            const filename = `${title}_${dateString}_${time}.xlsx`
+            
+            saveAs(new Blob([buffer], { type: 'application/octet-stream' }), filename);
+          });
+    });
+  }
+
   render() {
     const { brandsData, productsData } = this.state;
     
@@ -104,8 +132,12 @@ export class Budget extends Component {
         <DataGrid id="grid-container"
           dataSource={brandsData}
           ref={ref => this.dataGrid = ref}
+          onExporting={this.onExporting}
           onInitNewRow={this.getProducts}
           onEditingStart={this.onEditingStart}>
+
+          <Export enabled={true} />
+          
           <Column dataField="product" caption="Brand / Produit" calculateDisplayValue={this.getProductName}>
             <Lookup dataSource={productsData} displayExpr="product" valueExpr="product" />
           </Column>
@@ -119,6 +151,7 @@ export class Budget extends Component {
 
           <Toolbar>
             <Item name="addRowButton" />
+            <Item name="exportButton" />
           </Toolbar>
 
           <Summary>
