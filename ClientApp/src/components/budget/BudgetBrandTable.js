@@ -17,25 +17,26 @@ import { Workbook } from "exceljs";
 import saveAs from "file-saver";
 import { exportDataGrid } from "devextreme/excel_exporter";
 import BudgetDetailTemplate from "./BudgetDetailTemplate";
+import { ApiService } from "../../services/ApiService";
 
-const API_URL = "https://localhost:7071/api/BudgetManagerRepresentative";
-
+const API_URL = "https://localhost:7071/api/BudgetManager";
 export class BudgetBrandTable extends Component {
   constructor(props) {
     super(props);
+    this.apiService = new ApiService();
 
     this.state = {
       brandsData: new CustomStore({
         key: "id",
-        load: () => this.sendRequest(`${API_URL}`),
-        insert: (values) => this.sendRequest(`${API_URL}`, "POST", JSON.stringify(values)),
+        load: () => this.apiService.sendRequest(`${API_URL}`),
+        insert: (values) => this.apiService.sendRequest(`${API_URL}`, "POST", JSON.stringify(values)),
         update: (key, values) =>
-          this.sendRequest(
+          this.apiService.sendRequest(
             `${API_URL}/${key}`,
             "PUT",
             JSON.stringify({ ...this.state.editingRowData, ...values })
           ),
-        remove: (key) => this.sendRequest(`${API_URL}/${key}`, "DELETE", null),
+        remove: (key) => this.apiService.sendRequest(`${API_URL}/${key}`, "DELETE", null),
       }),
       productsData: [],
       editingRowData: {},
@@ -52,32 +53,8 @@ export class BudgetBrandTable extends Component {
     this.setState({ editingRowData: e.data });
   };
 
-  sendRequest(url, method = "GET", data = {}) {
-    if (method === "GET") {
-      return fetch(url).then((result) =>
-        result.json().then((data) => {
-          if (result.ok) return data;
-          throw data.Message;
-        })
-      );
-    }
-
-    return fetch(url, {
-      method,
-      body: data,
-      headers: { "Content-Type": "application/json;charset=UTF-8" },
-    }).then((result) => {
-      if (result.ok) {
-        return result.text().then((text) => text && JSON.parse(text));
-      }
-      return result.json().then((json) => {
-        throw json.Message;
-      });
-    });
-  }
-
   getProducts(editingRowData) {
-    this.sendRequest(`${API_URL}/Products`).then((products) => {
+    this.apiService.sendRequest(`${API_URL}/Products`).then((products) => {
       return this.setState({
         productsData: editingRowData.data.product
           ? [{ product: editingRowData.data.product }, ...products]

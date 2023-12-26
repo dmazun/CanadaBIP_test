@@ -16,20 +16,22 @@ import { Workbook } from 'exceljs';
 import saveAs from 'file-saver';
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import { BudgetRepSelectComponent } from "./BudgetRepSelectComponent";
+import { ApiService } from "../../services/ApiService";
 
 const API_URL = "https://localhost:7071/api/BudgetManagerRepresentative";
 
 export class BudgetRepresentatives extends Component {
   constructor(props) {
     super(props);
+    this.apiService = new ApiService();
 
     this.state = {
       brandsData: new CustomStore({
         key: 'id',
-        load: () => this.sendRequest(`${API_URL}`),
-        insert: (values) => this.sendRequest(`${API_URL}`, 'POST', JSON.stringify(values))
+        load: () => this.apiService.sendRequest(`${API_URL}`),
+        insert: (values) => this.apiService.sendRequest(`${API_URL}`, 'POST', JSON.stringify(values))
           .then(() => this.getRepNames()),
-        update: (key, values) => this.sendRequest(`${API_URL}/${key}`, 'PUT', 
+        update: (key, values) => this.apiService.sendRequest(`${API_URL}/${key}`, 'PUT', 
           JSON.stringify({
             ...{
               sales_Area_Code: this.state.editingRowData.rep_Sales_Area_Code,
@@ -40,7 +42,7 @@ export class BudgetRepresentatives extends Component {
             ...values
           }))
           .then(() => this.getRepNames()),
-        remove: (key) => this.sendRequest(`${API_URL}/${key}`, 'DELETE', null)
+        remove: (key) => this.apiService.sendRequest(`${API_URL}/${key}`, 'DELETE', null)
           .then(() => this.getRepNames())
       }),
       productsData: [],
@@ -54,35 +56,13 @@ export class BudgetRepresentatives extends Component {
     this.getRepNames();
   }
 
-  sendRequest(url, method = 'GET', data = {}) {
-    if (method === 'GET') {
-      return fetch(url).then((result) => result.json().then((data) => {
-        if (result.ok) return data;
-        throw data.Message;
-      }));
-    }
-
-    return fetch(url, {
-      method,
-      body: data,
-      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-    }).then((result) => {
-      if (result.ok) {
-        return result.text().then((text) => text && JSON.parse(text));
-      }
-      return result.json().then((json) => {
-        throw json.Message;
-      });
-    });
-  }
-
   getProducts() {
-    this.sendRequest(`${API_URL}/Products`)
+    this.apiService.sendRequest(`${API_URL}/Products`)
     .then(products => this.setState({ productsData: products }));
   }
 
   getRepNames() {
-    this.sendRequest(`${API_URL}/RepNames`)
+    this.apiService.sendRequest(`${API_URL}/RepNames`)
       .then(res => this.setState({ repNamesData: res }));
   }
 
