@@ -16,7 +16,6 @@ export class ApiService {
       headers: { "Content-Type": "application/json;charset=UTF-8" },
     }).then((result) => {
       if (result.ok) {
-        console.log('RR', result)
         return result.text().then((text) => text && JSON.parse(text));
       }
       return result.json().then((json) => {

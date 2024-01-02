@@ -29,14 +29,19 @@ export class BudgetBrandTable extends Component {
       brandsData: new CustomStore({
         key: "id",
         load: () => this.apiService.sendRequest(`${API_URL}`),
-        insert: (values) => this.apiService.sendRequest(`${API_URL}`, "POST", JSON.stringify(values)),
+        insert: (values) => 
+          this.apiService.sendRequest(`${API_URL}`, "POST", JSON.stringify(values))
+            .then(() => this.props.productChanged()),
         update: (key, values) =>
           this.apiService.sendRequest(
             `${API_URL}/${key}`,
             "PUT",
             JSON.stringify({ ...this.state.editingRowData, ...values })
-          ),
-        remove: (key) => this.apiService.sendRequest(`${API_URL}/${key}`, "DELETE", null),
+          )
+          .then(() => this.props.productChanged()),
+        remove: (key) => 
+          this.apiService.sendRequest(`${API_URL}/${key}`, "DELETE", null)
+            .then(() => this.props.productChanged()),
       }),
       productsData: [],
       editingRowData: {},
