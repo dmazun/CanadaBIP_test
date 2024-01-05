@@ -27,7 +27,7 @@ namespace CanadaBIP_test.Controllers
             };
         }
 
-        [HttpGet]
+        [HttpGet("RepNames")]
         public IActionResult GetRepNames()
         {
             List<BudgetRepNameModel> result = _context.BRepName

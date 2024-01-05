@@ -1,10 +1,15 @@
-import { RepsTable } from './RepsTable';
+import { useState } from "react";
+import { RepNameSelect } from "./RepNameSelect";
 
 export default function RepresentativePage() {
+  const [repSACode, setRepSACode] = useState('ALL');
+
   return (
-    <div>
+    <>
       <h1>Representative</h1>
-      <RepsTable />
-    </div>
+      <p>NAME: {repSACode}</p>
+
+      <RepNameSelect selectRepName={(code) => setRepSACode(code)}  />
+    </>
   );
 }
