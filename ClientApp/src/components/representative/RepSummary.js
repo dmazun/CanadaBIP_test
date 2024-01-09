@@ -6,6 +6,7 @@ import {
   Summary,
   TotalItem,
   Export,
+  HeaderFilter,
 } from "devextreme-react/data-grid";
 import { Workbook } from "exceljs";
 import saveAs from "file-saver";
@@ -43,6 +44,7 @@ export class RepSummary extends Component {
     exportDataGrid({
       component: e.component,
       worksheet: worksheet,
+      autoFilterEnabled: true,
       customizeCell: function (options) {
         options.excelCell.font = { name: "Arial", size: 12 };
         options.excelCell.alignment = { horizontal: "left" };
@@ -76,9 +78,10 @@ export class RepSummary extends Component {
             this.props.repSACode !== "ALL"
               ? ["rep_Sales_Area_Code", "=", this.props.repSACode]
               : null
-          }        
+          }
           onExporting={this.onExporting}
         >
+          <HeaderFilter visible={true} />
           <Export enabled={true} />
 
           <Column dataField="product" caption="BRANDS / PRODUITS" />
@@ -91,7 +94,9 @@ export class RepSummary extends Component {
             dataType="number"
             format="currency"
             caption="Your / Votre Budget"
-          />
+          >
+            <HeaderFilter groupInterval={500} />
+          </Column>
           <Column
             dataField="amount_Spent"
             dataType="number"
