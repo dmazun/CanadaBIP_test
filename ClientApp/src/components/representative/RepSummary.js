@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import "devextreme/dist/css/dx.light.css";
-import { DataGrid, Column} from "devextreme-react/data-grid";
+import {
+  DataGrid,
+  Column,
+  Summary,
+  TotalItem,
+} from "devextreme-react/data-grid";
 import { ApiService } from "../../services/ApiService";
 
 const API_URL = "https://localhost:7071/api/BudgetRepresentative";
@@ -47,18 +52,71 @@ export class RepSummary extends Component {
             dataField="rep_Employee_Name"
             caption="Rep Name / Nom Représentant"
           />
-          <Column dataField="amount_Budget" caption="Your / Votre Budget" />
-          <Column dataField="amount_Spent" caption="Spent / Dépensé" />
+          <Column
+            dataField="amount_Budget"
+            dataType="number"
+            format="currency"
+            caption="Your / Votre Budget"
+          />
+          <Column
+            dataField="amount_Spent"
+            dataType="number"
+            format="currency"
+            caption="Spent / Dépensé"
+          />
           <Column
             dataField="amount_Committed_Planned"
+            dataType="number"
+            format="currency"
             caption="Committed + Planned / Commis + Planifié"
           />
           <Column
             dataField="amount_Left"
+            dataType="number"
+            format="currency"
             caption="BUDGET REMAINING / BUDGET RESTANT"
           />
-          <Column dataField="amount_Wish" caption="Wish / Souhaité" />
+          <Column
+            dataField="amount_Wish"
+            dataType="number"
+            format="currency"
+            caption="Wish / Souhaité"
+          />
           <Column dataField="rep_Sales_Area_Code" visible={false} />
+
+          <Summary>
+            <TotalItem column="product" displayFormat="TOTAL:" />
+            <TotalItem
+              column="amount_Budget"
+              summaryType="sum"
+              valueFormat="currency"
+              displayFormat="{0}"
+            />
+            <TotalItem
+              column="amount_Spent"
+              summaryType="sum"
+              valueFormat="currency"
+              displayFormat="{0}"
+            />
+            <TotalItem
+              column="amount_Committed_Planned"
+              summaryType="sum"
+              valueFormat="currency"
+              displayFormat="{0}"
+            />
+            <TotalItem
+              column="amount_Left"
+              summaryType="sum"
+              valueFormat="currency"
+              displayFormat="{0}"
+            />
+            <TotalItem
+              column="amount_Wish"
+              summaryType="sum"
+              valueFormat="currency"
+              displayFormat="{0}"
+            />
+          </Summary>
         </DataGrid>
       </div>
     );
