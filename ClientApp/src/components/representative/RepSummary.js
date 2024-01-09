@@ -5,7 +5,11 @@ import {
   Column,
   Summary,
   TotalItem,
+  Export,
 } from "devextreme-react/data-grid";
+import { Workbook } from "exceljs";
+import saveAs from "file-saver";
+import { exportDataGrid } from "devextreme/excel_exporter";
 import { ApiService } from "../../services/ApiService";
 
 const API_URL = "https://localhost:7071/api/BudgetRepresentative";
@@ -32,6 +36,33 @@ export class RepSummary extends Component {
     });
   }
 
+  onExporting(e) {
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet("Sheet");
+
+    exportDataGrid({
+      component: e.component,
+      worksheet: worksheet,
+      customizeCell: function (options) {
+        options.excelCell.font = { name: "Arial", size: 12 };
+        options.excelCell.alignment = { horizontal: "left" };
+      },
+    }).then(function () {
+      workbook.xlsx.writeBuffer().then(function (buffer) {
+        const title = "Export_BudgetRepresentative_Summary";
+        const date = new Date(Date.now());
+        const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+        const time = `${date.getHours()}_${date.getMinutes()}`;
+        const filename = `${title}_${dateString}_${time}.xlsx`;
+
+        saveAs(
+          new Blob([buffer], { type: "application/octet-stream" }),
+          filename
+        );
+      });
+    });
+  }
+
   render() {
     const { summaryData } = this.state;
     return (
@@ -45,8 +76,11 @@ export class RepSummary extends Component {
             this.props.repSACode !== "ALL"
               ? ["rep_Sales_Area_Code", "=", this.props.repSACode]
               : null
-          }
+          }        
+          onExporting={this.onExporting}
         >
+          <Export enabled={true} />
+
           <Column dataField="product" caption="BRANDS / PRODUITS" />
           <Column
             dataField="rep_Employee_Name"
