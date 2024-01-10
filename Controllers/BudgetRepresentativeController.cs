@@ -46,5 +46,15 @@ namespace CanadaBIP_test.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet]
+        public IActionResult Get()
+        {
+            List<BudgetRepresentativeModel> result = _context.BRepresentative
+                .Where(x => x.Manager_Sales_Area_Code == _user.Sales_Area_Code)
+                .ToList();
+
+            return Ok(result);
+        }
     }
 }
