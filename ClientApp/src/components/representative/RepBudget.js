@@ -28,9 +28,17 @@ export class RepBudget extends Component {
       budgetData: new CustomStore({
         key: "id",
         load: () => this.apiService.sendRequest(`${API_URL}`),
+        insert: (values) => this.apiService.sendRequest(`${API_URL}`, 'POST', JSON.stringify(values)),
+        update: (key, values) => this.apiService.sendRequest(`${API_URL}/${key}`, 'PUT', JSON.stringify({...this.state.editingRowData, ...values})),
+        remove: (key) => this.apiService.sendRequest(`${API_URL}/${key}`, 'DELETE', null)
       }),
+      editingRowData: {},
     };
   }
+
+  onEditingStart = (e) => {
+    this.setState({ editingRowData: e.data });
+  };
 
   onExporting(e) {
     const workbook = new Workbook();
@@ -76,6 +84,7 @@ export class RepBudget extends Component {
               ? ["rep_Sales_Area_Code", "=", this.props.repSACode]
               : null
           }
+          onEditingStart={this.onEditingStart}
           onExporting={this.onExporting}
         >
           <HeaderFilter visible={true} />

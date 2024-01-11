@@ -154,4 +154,31 @@ namespace CanadaBIP_test.Models
         public int? Is_BRD { get; set; }
         public int? Is_Initiative { get; set; }
     }
+
+    public class BudgetRepresentativeEditModel
+    {        
+        public string? Int_Usr_ID { get; set; }
+        public string? step { get; set; }
+        public int? ID { get; set; }
+        public string? BU { get; set; }
+        public string? Sales_Area_Code { get; set; }
+        public DateTime? Date_Entry { get; set; }
+        public string? Event_Name { get; set; }
+        public string? Product { get; set; }
+        public int? Initiative_ID { get; set; }
+        public string? Note { get; set; }
+        public string? Type { get; set; }
+        public string? Event_Type { get; set; }
+        public string? Attendance { get; set; }
+        public string? Shared_Individual { get; set; }
+        [Column(TypeName = "decimal(25, 2)")]
+        public decimal? Amount_Allocated { get; set; }
+        public string? Customer_ID { get; set; }
+        public int? Customer_Count { get; set; }
+        public string? Customer_Type { get; set; }
+        public string? FCPA_Veeva_ID { get; set; }
+        public string? Account_ID { get; set; }
+        public int? Tier { get; set; }
+        public int? Result { get; set; }
+    }
 }
