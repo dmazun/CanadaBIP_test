@@ -102,13 +102,6 @@ export class RepBudget extends Component {
       .then((products) => this.setState({ productsData: products }));
   }
 
-  calculateRepName(rowData) {
-    return rowData.rep_Employee_Name;
-  }
-  getProductName(rowData) {
-    return rowData.product;
-  }
-
   getFilteredProducts(options) {
     return {
       store: this.state.productsData,
@@ -148,19 +141,14 @@ export class RepBudget extends Component {
             dataField="sales_Area_Code"
             caption="Rep Name / Nom Représentant"
             setCellValue={this.setRepNameValue}
-            calculateDisplayValue={this.calculateRepName}
-            editCellComponent={RepEditNameSelect}>
-            <Lookup
-              dataSource={repNamesData}
-              calculateDisplayValue={this.calculateRepName}
-              valueExpr="sales_Area_Code"/>
+            calculateCellValue={(rowData) => rowData.sales_Area_Code || rowData.rep_Sales_Area_Code }
+            calculateDisplayValue={(rowData) => rowData.rep_Employee_Name}
+            editCellComponent={RepEditNameSelect}
+          >
+            <Lookup dataSource={repNamesData} />
           </Column>
 
-          <Column
-            dataField="product"
-            caption="Brand / Produit"
-            setCellValue={this.setProductValue}
-            calculateDisplayValue={this.getProductName}>
+          <Column dataField="product" caption="Brand / Produit">
             <Lookup
               dataSource={this.getFilteredProducts.bind(this)}
               displayExpr="product"
