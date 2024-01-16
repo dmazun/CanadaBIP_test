@@ -40,6 +40,24 @@ namespace CanadaBIP_test.Controllers
             return Ok(result);
         }
 
+        [HttpGet("RepNamesSelect")]
+        public IActionResult GetRepNamesSelect()
+        {
+            List<BudgetRepNameSelectModel> result = _context.BRepNameSelect
+                .Where(x => x.Parent_Sales_Area_Code == _user.Sales_Area_Code)
+                .ToList();
+
+            return Ok(result);
+        }
+
+        [HttpGet("RepProducts")]
+        public IActionResult GetRepProductsSelect()
+        {
+            List<BudgetRepProductModel> result = _context.BRepProductSelect.ToList();
+
+            return Ok(result);
+        }
+
         [HttpGet("Summary")]
         public IActionResult GetRepSummary()
         {

@@ -8,14 +8,16 @@ import {
   Export,
   HeaderFilter,
   Editing,
-  Toolbar, 
+  Toolbar,
   Item,
+  Lookup,
 } from "devextreme-react/data-grid";
 import CustomStore from "devextreme/data/custom_store";
 import { Workbook } from "exceljs";
 import saveAs from "file-saver";
 import { exportDataGrid } from "devextreme/excel_exporter";
 import { ApiService } from "../../services/ApiService";
+import { RepEditNameSelect } from "./RepEditNameSelect";
 
 const API_URL = "https://localhost:7071/api/BudgetRepresentative";
 
@@ -28,12 +30,30 @@ export class RepBudget extends Component {
       budgetData: new CustomStore({
         key: "id",
         load: () => this.apiService.sendRequest(`${API_URL}`),
-        insert: (values) => this.apiService.sendRequest(`${API_URL}`, 'POST', JSON.stringify(values)),
-        update: (key, values) => this.apiService.sendRequest(`${API_URL}/${key}`, 'PUT', JSON.stringify({...this.state.editingRowData, ...values})),
-        remove: (key) => this.apiService.sendRequest(`${API_URL}/${key}`, 'DELETE', null)
+        insert: (values) =>
+          this.apiService.sendRequest(
+            `${API_URL}`,
+            "POST",
+            JSON.stringify(values)
+          ),
+        update: (key, values) =>
+          this.apiService.sendRequest(
+            `${API_URL}/${key}`,
+            "PUT",
+            JSON.stringify({ ...this.state.editingRowData, ...values })
+          ),
+        remove: (key) =>
+          this.apiService.sendRequest(`${API_URL}/${key}`, "DELETE", null),
       }),
       editingRowData: {},
+      repNamesData: [],
+      productsData: [],
     };
+  }
+
+  componentDidMount() {
+    this.getRepNames();
+    this.getProducts();
   }
 
   onEditingStart = (e) => {
@@ -70,8 +90,42 @@ export class RepBudget extends Component {
     });
   }
 
+  getRepNames() {
+    this.apiService
+      .sendRequest(`${API_URL}/RepNamesSelect`)
+      .then((res) => this.setState({ repNamesData: res }));
+  }
+
+  getProducts() {
+    this.apiService
+      .sendRequest(`${API_URL}/RepProducts`)
+      .then((products) => this.setState({ productsData: products }));
+  }
+
+  calculateRepName(rowData) {
+    return rowData.rep_Employee_Name;
+  }
+  getProductName(rowData) {
+    return rowData.product;
+  }
+
+  getFilteredProducts(options) {
+    return {
+      store: this.state.productsData,
+      filter: options.data
+        ? ["sales_Area_Code", "=", options.data.sales_Area_Code]
+        : null,
+    };
+  }
+
+  setRepNameValue(rowData, value) {
+    rowData.product = null;
+    this.defaultSetCellValue(rowData, value);
+  }
+
   render() {
-    const { budgetData } = this.state;
+    const { budgetData, repNamesData } = this.state;
+
     return (
       <div>
         <h2>Budget Representative / Budget Représentant</h2>
@@ -91,10 +145,27 @@ export class RepBudget extends Component {
           <Export enabled={true} />
 
           <Column
-            dataField="rep_Employee_Name"
+            dataField="sales_Area_Code"
             caption="Rep Name / Nom Représentant"
-          />
-          <Column dataField="product" caption="Brand / Produit" />
+            setCellValue={this.setRepNameValue}
+            calculateDisplayValue={this.calculateRepName}
+            editCellComponent={RepEditNameSelect}>
+            <Lookup
+              dataSource={repNamesData}
+              calculateDisplayValue={this.calculateRepName}
+              valueExpr="sales_Area_Code"/>
+          </Column>
+
+          <Column
+            dataField="product"
+            caption="Brand / Produit"
+            setCellValue={this.setProductValue}
+            calculateDisplayValue={this.getProductName}>
+            <Lookup
+              dataSource={this.getFilteredProducts.bind(this)}
+              displayExpr="product"
+              valueExpr="product"/>
+          </Column>
           <Column
             dataField="date_Entry"
             dataType="date"
@@ -155,11 +226,11 @@ export class RepBudget extends Component {
           </Summary>
 
           <Editing
-              mode="row"
-              useIcons={true}
-              allowUpdating={true}
-              allowDeleting={true}
-              allowAdding={true} />
+            mode="row"
+            useIcons={true}
+            allowUpdating={true}
+            allowDeleting={true}
+            allowAdding={true} />
         </DataGrid>
       </div>
     );

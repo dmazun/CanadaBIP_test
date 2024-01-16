@@ -181,4 +181,25 @@ namespace CanadaBIP_test.Models
         public int? Tier { get; set; }
         public int? Result { get; set; }
     }
+
+    [Table("V_Budget_BR_M_Combobox_RepNames", Schema = "budget")]
+    public class BudgetRepNameSelectModel
+    {
+        public int ID { get; set; }
+        public string? Sales_Area_Code { get; set; }
+        public string? Sales_Area_Name { get; set; }
+        public string? Parent_Sales_Area_Code { get; set; }
+        public string? Employee_Name { get; set; }
+        public string? Employee_ID { get; set; }
+        public string? Email_Address { get; set; }
+    }
+
+    [Table("V_Budget_BR_Combobox_Product", Schema = "budget")]
+    public class BudgetRepProductModel
+    {
+        public int ID { get; set; }
+        public string? Sales_Area_Code { get; set; }
+        public string? Product { get; set; }
+        public string? Product_UI { get; set; }
+    }
 }
