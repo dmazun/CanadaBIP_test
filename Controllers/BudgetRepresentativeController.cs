@@ -58,6 +58,14 @@ namespace CanadaBIP_test.Controllers
             return Ok(result);
         }
 
+        [HttpGet("RepInitiatives")]
+        public IActionResult GetRepInitiativeSelect()
+        {
+            List<BudgetRepInitiativeModel> result = _context.BRepInitiativeSelect.ToList();
+
+            return Ok(result);
+        }
+
         [HttpGet("Summary")]
         public IActionResult GetRepSummary()
         {

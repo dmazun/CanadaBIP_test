@@ -202,4 +202,14 @@ namespace CanadaBIP_test.Models
         public string? Product { get; set; }
         public string? Product_UI { get; set; }
     }
+
+    [Table("V_Budget_BR_Combobox_Initiatives", Schema = "budget")]
+    public class BudgetRepInitiativeModel
+    {
+        public Int64 IDN { get; set; }
+        public int? ID { get; set; }
+        public string? BU { get; set; }
+        public string? Product { get; set; }
+        public string? Initiative { get; set; }
+    }
 }

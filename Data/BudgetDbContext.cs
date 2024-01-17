@@ -20,5 +20,6 @@ namespace CanadaBIP_test.Data
         public DbSet<BudgetRepProductModel> BRepProductSelect { get; set; }
         public DbSet<BudgetRepSummaryModel> BRepSummary { get; set; }
         public DbSet<BudgetRepresentativeModel> BRepresentative { get; set; }
+        public DbSet<BudgetRepInitiativeModel> BRepInitiativeSelect { get; set; }
     }
 }

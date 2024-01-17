@@ -48,12 +48,14 @@ export class RepBudget extends Component {
       editingRowData: {},
       repNamesData: [],
       productsData: [],
+      initiativesData: [],
     };
   }
 
   componentDidMount() {
     this.getRepNames();
     this.getProducts();
+    this.getInitiatives();
   }
 
   onEditingStart = (e) => {
@@ -111,6 +113,24 @@ export class RepBudget extends Component {
     };
   }
 
+  getInitiatives() {
+    this.apiService
+      .sendRequest(`${API_URL}/RepInitiatives`)
+      .then((data) => this.setState({ initiativesData: data }));
+  }
+
+  getFilteredInitiatives(options) {
+    return {
+      store: this.state.initiativesData,
+      filter: options.data ? ["product", "=", options.data.product] : null,
+    };
+  }
+
+  setProductValue(rowData, value) {
+    rowData.initiative_ID = null;
+    this.defaultSetCellValue(rowData, value);
+  }
+
   setRepNameValue(rowData, value) {
     rowData.product = null;
     this.defaultSetCellValue(rowData, value);
@@ -141,18 +161,25 @@ export class RepBudget extends Component {
             dataField="sales_Area_Code"
             caption="Rep Name / Nom Représentant"
             setCellValue={this.setRepNameValue}
-            calculateCellValue={(rowData) => rowData.sales_Area_Code || rowData.rep_Sales_Area_Code }
+            calculateCellValue={(rowData) =>
+              rowData.sales_Area_Code || rowData.rep_Sales_Area_Code
+            }
             calculateDisplayValue={(rowData) => rowData.rep_Employee_Name}
             editCellComponent={RepEditNameSelect}
           >
             <Lookup dataSource={repNamesData} />
           </Column>
 
-          <Column dataField="product" caption="Brand / Produit">
+          <Column
+            dataField="product"
+            caption="Brand / Produit"
+            setCellValue={this.setProductValue}
+          >
             <Lookup
               dataSource={this.getFilteredProducts.bind(this)}
               displayExpr="product"
-              valueExpr="product"/>
+              valueExpr="product"
+            />
           </Column>
           <Column
             dataField="date_Entry"
@@ -163,7 +190,18 @@ export class RepBudget extends Component {
             dataField="event_Name"
             caption="Name Of Event / Nom De L'événement"
           />
-          <Column dataField="initiative" caption="Initiative" />
+          <Column
+            dataField="initiative_ID"
+            caption="Initiative"
+            calculateCellValue={(rowData) => rowData.initiative}
+            calculateDisplayValue={(rowData) => rowData.initiative}
+          >
+            <Lookup
+              dataSource={this.getFilteredInitiatives.bind(this)}
+              displayExpr="initiative"
+              valueExpr="idn"
+            />
+          </Column>
           <Column
             dataField="amount_Allocated"
             dataType="number"
@@ -181,7 +219,10 @@ export class RepBudget extends Component {
             dataField="shared_Individual"
             caption="Shared/Individual / Événement partagé"
           />
-          <Column dataField="cust_Name_Display" caption="Speaker / Conférencier" />
+          <Column
+            dataField="cust_Name_Display"
+            caption="Speaker / Conférencier"
+          />
           <Column
             dataField="customer_Count"
             caption="# Cust / Nombre clients"
@@ -218,7 +259,8 @@ export class RepBudget extends Component {
             useIcons={true}
             allowUpdating={true}
             allowDeleting={true}
-            allowAdding={true} />
+            allowAdding={true}
+          />
         </DataGrid>
       </div>
     );
