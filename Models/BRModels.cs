@@ -212,4 +212,28 @@ namespace CanadaBIP_test.Models
         public string? Product { get; set; }
         public string? Initiative { get; set; }
     }
+
+    [Table("Budget_BR_DIC_Types", Schema = "budget")]
+    public class BudgetRepStatusModel
+    {
+        public int? ID { get; set; }
+        public string? Type { get; set; }
+        public int? Status { get; set; }
+        public string? Creator { get; set; }
+        public DateTime? Created { get; set; }
+        public string? Changer { get; set; }
+        public DateTime? Changed { get; set; }
+    }
+
+    [Table("Budget_BR_DIC_Type_Of_Event", Schema = "budget")]
+    public class BudgetRepEventTypeModel
+    {
+        public int? ID { get; set; }
+        public string? Type_Of_Event { get; set; }
+        public int? Status { get; set; }
+        public string? Creator { get; set; }
+        public DateTime? Created { get; set; }
+        public string? Changer { get; set; }
+        public DateTime? Changed { get; set; }
+    }
 }

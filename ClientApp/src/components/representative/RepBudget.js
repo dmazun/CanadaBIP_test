@@ -18,6 +18,7 @@ import saveAs from "file-saver";
 import { exportDataGrid } from "devextreme/excel_exporter";
 import { ApiService } from "../../services/ApiService";
 import { RepEditNameSelect } from "./RepEditNameSelect";
+import { attendanceData, sharedIndividualData } from "./data";
 
 const API_URL = "https://localhost:7071/api/BudgetRepresentative";
 
@@ -49,6 +50,8 @@ export class RepBudget extends Component {
       repNamesData: [],
       productsData: [],
       initiativesData: [],
+      statusesData: [],
+      eventTypesData: [],
     };
   }
 
@@ -56,6 +59,8 @@ export class RepBudget extends Component {
     this.getRepNames();
     this.getProducts();
     this.getInitiatives();
+    this.geStatuses();
+    this.getEventTypes();
   }
 
   onEditingStart = (e) => {
@@ -98,6 +103,18 @@ export class RepBudget extends Component {
       .then((res) => this.setState({ repNamesData: res }));
   }
 
+  geStatuses() {
+    this.apiService
+      .sendRequest(`${API_URL}/RepStatuses`)
+      .then((res) => this.setState({ statusesData: res }));
+  }
+
+  getEventTypes() {
+    this.apiService
+      .sendRequest(`${API_URL}/RepEventTypes`)
+      .then((res) => this.setState({ eventTypesData: res }));
+  }
+
   getProducts() {
     this.apiService
       .sendRequest(`${API_URL}/RepProducts`)
@@ -137,7 +154,7 @@ export class RepBudget extends Component {
   }
 
   render() {
-    const { budgetData, repNamesData } = this.state;
+    const { budgetData, repNamesData, statusesData, eventTypesData } = this.state;
 
     return (
       <div>
@@ -156,7 +173,7 @@ export class RepBudget extends Component {
         >
           <HeaderFilter visible={true} />
           <Export enabled={true} />
-
+ 
           <Column
             dataField="sales_Area_Code"
             caption="Rep Name / Nom Représentant"
@@ -181,15 +198,18 @@ export class RepBudget extends Component {
               valueExpr="product"
             />
           </Column>
+
           <Column
             dataField="date_Entry"
             dataType="date"
             caption="Date of Event / Date de l'Evenement"
           />
+
           <Column
             dataField="event_Name"
             caption="Name Of Event / Nom De L'événement"
           />
+
           <Column
             dataField="initiative_ID"
             caption="Initiative"
@@ -202,41 +222,76 @@ export class RepBudget extends Component {
               valueExpr="idn"
             />
           </Column>
+
           <Column
             dataField="amount_Allocated"
             dataType="number"
             format="currency"
             caption="Amount / Montant"
           />
-          <Column dataField="status" caption="Status" />
+
+          <Column dataField="type" caption="Status">
+            <Lookup
+              dataSource={statusesData}
+              displayExpr="type"
+              valueExpr="type"
+            />
+          </Column>
+
           <Column dataField="note" caption="Notes" />
+
           <Column
             dataField="event_Type"
             caption="Type of Event / Type D'événement"
-          />
-          <Column dataField="attendance" caption="Attendance / Présence" />
+          >
+            <Lookup
+              dataSource={eventTypesData}
+              displayExpr="type_Of_Event"
+              valueExpr="type_Of_Event"
+            />
+          </Column>
+
+          <Column dataField="attendance" caption="Attendance / Présence">
+            <Lookup
+              dataSource={attendanceData}
+              displayExpr="name"
+              valueExpr="name"
+            />
+          </Column>
+
           <Column
             dataField="shared_Individual"
             caption="Shared/Individual / Événement partagé"
-          />
+          >
+            <Lookup
+              dataSource={sharedIndividualData}
+              displayExpr="name"
+              valueExpr="name"
+            />
+          </Column>
+ 
           <Column
             dataField="cust_Name_Display"
             caption="Speaker / Conférencier"
           />
+
           <Column
             dataField="customer_Count"
+            dataType="number"
             caption="# Cust / Nombre clients"
           />
+         
           <Column
             dataField="customer_Type"
             caption="Cust Type / Type de clients"
           />
+          
           <Column
             dataField="fcpA_Veeva_ID"
             caption="#PW and/or #Veeva / #PW et/ou #Veeva"
           />
           <Column dataField="account_Name" caption="Institution" />
-          <Column dataField="tier" caption="Tier / Niveau" />
+          <Column dataField="tier" dataType="number" caption="Tier / Niveau" />
           <Column dataField="rep_Sales_Area_Code" visible={false} />
 
           <Toolbar>

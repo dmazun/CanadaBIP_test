@@ -66,6 +66,23 @@ namespace CanadaBIP_test.Controllers
             return Ok(result);
         }
 
+
+        [HttpGet("RepStatuses")]
+        public IActionResult GetRepStatusSelect()
+        {
+            List<BudgetRepStatusModel> result = _context.BRepStatusSelect.ToList();
+
+            return Ok(result);
+        }
+
+        [HttpGet("RepEventTypes")]
+        public IActionResult GetRepEventTypeSelect()
+        {
+            List<BudgetRepEventTypeModel> result = _context.BRepEventTypeSelect.ToList();
+
+            return Ok(result);
+        }
+
         [HttpGet("Summary")]
         public IActionResult GetRepSummary()
         {
