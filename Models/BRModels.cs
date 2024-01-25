@@ -7,7 +7,7 @@ namespace CanadaBIP_test.Models
     public class BudgetRepNameModel
     {
         public int ID { get; set; }
-        [Column(TypeName = "nvarchar(255)")]
+        [Column(TypeName = "nvarchar(255)")] 
         public string? Sales_Area_Code { get; set; }
         [Column(TypeName = "nvarchar(255)")]
         public string? Sales_Area_Name { get; set; }
@@ -93,6 +93,8 @@ namespace CanadaBIP_test.Models
         [Column(TypeName = "nvarchar(255)")]
         public string? Manager_Employee_ID { get; set; }
         [Column(TypeName = "nvarchar(255)")]
+        public string? Manager_Employee_Name { get; set; }
+        [Column(TypeName = "nvarchar(255)")]
         public string? Manager_Email_Address { get; set; }
         [Column(TypeName = "nvarchar(255)")]
         public string? Rep_Sales_Force_Code { get; set; }
@@ -128,6 +130,7 @@ namespace CanadaBIP_test.Models
         public string? Attendance { get; set; }
         [Column(TypeName = "nvarchar(255)")]
         public string? Shared_Individual { get; set; }
+        [Column(TypeName = "decimal(38,2)")]
         public decimal? Amount_Allocated { get; set; }
         [Column(TypeName = "nvarchar(255)")]
         public string? Customer_ID { get; set; }
@@ -144,10 +147,10 @@ namespace CanadaBIP_test.Models
         public string? Account_Name { get; set; }
         public int? Tier { get; set; }
         public int? Status { get; set; }
-        [Column(TypeName = "nvarchar(255)")] 
+        [Column(TypeName = "nvarchar(255)")]
         public string? Creator { get; set; }
         public DateTime? Created { get; set; }
-        [Column(TypeName = "nvarchar(255)")] 
+        [Column(TypeName = "nvarchar(255)")]
         public string? Changer { get; set; }
         public DateTime? Changed { get; set; }
         public int? Is_Expired { get; set; }
@@ -156,7 +159,7 @@ namespace CanadaBIP_test.Models
     }
 
     public class BudgetRepresentativeEditModel
-    {        
+    {
         public string? Int_Usr_ID { get; set; }
         public string? step { get; set; }
         public int? ID { get; set; }
@@ -235,5 +238,47 @@ namespace CanadaBIP_test.Models
         public DateTime? Created { get; set; }
         public string? Changer { get; set; }
         public DateTime? Changed { get; set; }
+    }
+
+    public class BudgetCustomerModel
+    {
+        public Int64? ID { get; set; }
+        public string? RELTIO_ID { get; set; }
+        public string? Name { get; set; }
+        public string? Specialty { get; set; }
+        public string? Workplace_Name { get; set; }
+        public string? Address { get; set; }
+        public string? City { get; set; }
+        public string? Province { get; set; }
+        public string? PostCode { get; set; }
+        public string? Mbrick { get; set; }
+        public BudgetCustomerModel(
+            Int64 id,
+            string? reltio_id,
+            string? name,
+            string? specialty,
+            string? workplace_Name,
+            string? address,
+            string? city,
+            string? province,
+            string? postCode,
+            string? mbrick
+        )
+        {
+            ID = id;
+            RELTIO_ID = reltio_id;
+            Name = name;
+            Specialty = specialty;
+            Workplace_Name = workplace_Name;
+            Address = address;
+            City = city;
+            Province = province;
+            PostCode = postCode;
+            Mbrick = mbrick;
+        }
+
+        public BudgetCustomerModel()
+        {
+        }
     }
 }

@@ -83,6 +83,54 @@ namespace CanadaBIP_test.Controllers
             return Ok(result);
         }
 
+        [HttpGet("RepCustomers")]
+        public async Task<IActionResult> GetRepCustomerSelect()
+        {
+            List<BudgetCustomerModel> result = _context.BRepCustomerSelect.ToList();
+           
+            return Ok(result);
+        }
+
+        [HttpGet("RepCustomersPartial")]
+        public IActionResult GetRepCustomerPartialSelect([FromQuery] int skip, [FromQuery] int take)            
+        {
+
+            using var cmd = _context.BRepCustomerPartialSelect.CreateDbCommand();
+            cmd.CommandText = "[budget].[sp_Budget_Get_DIM_CUSTOMER]";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
+
+            cmd.Parameters.Add(new SqlParameter("@skip", SqlDbType.Int) { Value = skip });
+            cmd.Parameters.Add(new SqlParameter("@take", SqlDbType.Int) { Value = take });
+
+            ArrayList customers = new ArrayList();
+            var reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var customer = new BudgetCustomerModel(
+                    reader["ID"] == DBNull.Value ? 0 : (Int64)reader["ID"], 
+                    reader["RELTIO_ID"] == DBNull.Value ? string.Empty : (string)reader["RELTIO_ID"], 
+                    reader["Name"] == DBNull.Value ? string.Empty : (string)reader["Name"], 
+                    reader["Specialty"] == DBNull.Value ? string.Empty : (string)reader["Specialty"], 
+                    reader["Workplace_Name"] == DBNull.Value ? string.Empty : (string)reader["Workplace_Name"], 
+                    reader["Address"] == DBNull.Value ? string.Empty : (string)reader["Address"], 
+                    reader["City"] == DBNull.Value ? string.Empty : (string)reader["City"], 
+                    reader["Province"] == DBNull.Value ? string.Empty : (string)reader["Province"], 
+                    reader["PostCode"] == DBNull.Value ? string.Empty : (string)reader["PostCode"], 
+                    reader["Mbrick"] == DBNull.Value ? string.Empty : (string)reader["Mbrick"]);
+
+                customers.Add(customer);
+            }
+
+            reader.Close();           
+            
+            var result = customers.ToArray();
+            // cmd.Connection.Close();
+            return Ok(result);
+        }
+
         [HttpGet("Summary")]
         public IActionResult GetRepSummary()
         {

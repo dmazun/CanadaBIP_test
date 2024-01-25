@@ -8,10 +8,6 @@ namespace CanadaBIP_test.Models
     {
         public int ID { get; set; }
         [Column(TypeName = "nvarchar(255)")]
-        public string? BU { get; set; }
-        [Column(TypeName = "nvarchar(255)")]
-        public string? BU_NAME { get; set; }
-        [Column(TypeName = "nvarchar(255)")]
         public string? Sales_Force_Code { get; set; }
         [Column(TypeName = "nvarchar(255)")]
         public string? Sales_Force_Name { get; set; }

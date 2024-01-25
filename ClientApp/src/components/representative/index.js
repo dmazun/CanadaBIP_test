@@ -2,6 +2,7 @@ import { useState } from "react";
 import { RepNameSelect } from "./RepNameSelect";
 import { RepSummary } from "./RepSummary";
 import { RepBudget } from "./RepBudget";
+import { Customers } from "./Customers";
 
 export default function RepresentativePage() {
   const [repSACode, setRepSACode] = useState('ALL');
@@ -11,8 +12,9 @@ export default function RepresentativePage() {
       <h1>Representative</h1>
 
       <RepNameSelect selectRepName={(code) => setRepSACode(code)}  />
-      <RepSummary repSACode={repSACode} />
-      <RepBudget repSACode={repSACode} />
+      {/* <RepSummary repSACode={repSACode} /> */}
+      <Customers />
+      {/* <RepBudget repSACode={repSACode} /> */}
     </>
   );
 }

@@ -90,7 +90,7 @@ namespace CanadaBIP_test.Models
     [Table("V_Budget_BMR_Combobox_RepNames", Schema = "budget")]
     public class BMRepNameModel
     {
-        public int ID { get; set; }
+        public Int64 ID { get; set; }
         public string? Sales_Area_Code { get; set; }
         public string? Sales_Area_Name { get; set; }
         public string? Parent_Sales_Area_Code { get; set; }
