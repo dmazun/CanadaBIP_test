@@ -18,7 +18,9 @@ import saveAs from "file-saver";
 import { exportDataGrid } from "devextreme/excel_exporter";
 import { ApiService } from "../../services/ApiService";
 import { RepEditNameSelect } from "./RepEditNameSelect";
+import { RepDropDownGridSelect } from "./RepDropDownGridSelect";
 import { attendanceData, sharedIndividualData } from "./data";
+import * as AspNetData from "devextreme-aspnet-data-nojquery";
 
 const API_URL = "https://localhost:7071/api/BudgetRepresentative";
 
@@ -39,14 +41,18 @@ export class RepBudget extends Component {
           ),
         update: (key, values) =>
           this.apiService.sendRequest(
-            `${API_URL}/${key}`,
-            "PUT",
-            JSON.stringify({ ...this.state.editingRowData, ...values })
+          `${API_URL}/${key}`,
+          "PUT",
+          JSON.stringify({ ...this.state.editingRowData, ...values })
           ),
         remove: (key) =>
           this.apiService.sendRequest(`${API_URL}/${key}`, "DELETE", null),
       }),
       editingRowData: {},
+      customersData: new AspNetData.createStore({
+        key: "name",
+        loadUrl: `${API_URL}/RepCustomers`,
+      }),
       repNamesData: [],
       productsData: [],
       initiativesData: [],
@@ -154,7 +160,7 @@ export class RepBudget extends Component {
   }
 
   render() {
-    const { budgetData, repNamesData, statusesData, eventTypesData } = this.state;
+    const { budgetData, repNamesData, statusesData, eventTypesData, customersData } = this.state;
 
     return (
       <div>
@@ -168,12 +174,15 @@ export class RepBudget extends Component {
               ? ["rep_Sales_Area_Code", "=", this.props.repSACode]
               : null
           }
+          height={500}
+          showBorders={true}
+          wordWrapEnabled={true}
           onEditingStart={this.onEditingStart}
           onExporting={this.onExporting}
         >
           <HeaderFilter visible={true} />
           <Export enabled={true} />
- 
+
           <Column
             dataField="sales_Area_Code"
             caption="Rep Name / Nom Représentant"
@@ -269,12 +278,17 @@ export class RepBudget extends Component {
               valueExpr="name"
             />
           </Column>
- 
+
           <Column
             dataField="cust_Name_Display"
             caption="Speaker / Conférencier"
-          />
-
+            editCellComponent={RepDropDownGridSelect}
+          >
+            <Lookup
+              dataSource={customersData}
+            />
+          </Column>
+          
           <Column
             dataField="customer_Count"
             dataType="number"

@@ -240,9 +240,10 @@ namespace CanadaBIP_test.Models
         public DateTime? Changed { get; set; }
     }
 
+    [Table("V_Budget_DIM_CUSTOMER", Schema = "budget")]
     public class BudgetCustomerModel
-    {
-        public Int64? ID { get; set; }
+    {        
+        public Int64 ID { get; set; }
         public string? RELTIO_ID { get; set; }
         public string? Name { get; set; }
         public string? Specialty { get; set; }
@@ -252,33 +253,5 @@ namespace CanadaBIP_test.Models
         public string? Province { get; set; }
         public string? PostCode { get; set; }
         public string? Mbrick { get; set; }
-        public BudgetCustomerModel(
-            Int64 id,
-            string? reltio_id,
-            string? name,
-            string? specialty,
-            string? workplace_Name,
-            string? address,
-            string? city,
-            string? province,
-            string? postCode,
-            string? mbrick
-        )
-        {
-            ID = id;
-            RELTIO_ID = reltio_id;
-            Name = name;
-            Specialty = specialty;
-            Workplace_Name = workplace_Name;
-            Address = address;
-            City = city;
-            Province = province;
-            PostCode = postCode;
-            Mbrick = mbrick;
-        }
-
-        public BudgetCustomerModel()
-        {
-        }
     }
 }

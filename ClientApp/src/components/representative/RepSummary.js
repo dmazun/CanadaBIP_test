@@ -7,11 +7,14 @@ import {
   TotalItem,
   Export,
   HeaderFilter,
+  Scrolling,
+  Paging,
 } from "devextreme-react/data-grid";
 import { Workbook } from "exceljs";
 import saveAs from "file-saver";
 import { exportDataGrid } from "devextreme/excel_exporter";
 import { ApiService } from "../../services/ApiService";
+import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 const API_URL = "https://localhost:7071/api/BudgetRepresentative";
 
@@ -20,13 +23,12 @@ export class RepSummary extends Component {
     super(props);
     this.apiService = new ApiService();
 
-    this.state = {
-      summaryData: [],
+    this.state = {      
+      summaryData: new AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${API_URL}/Summary`,
+      })
     };
-  }
-
-  componentDidMount() {
-    this.getSummaryData();
   }
 
   getSummaryData() {
@@ -69,7 +71,7 @@ export class RepSummary extends Component {
     const { summaryData } = this.state;
     return (
       <div>
-        <h2> Budget Representative Summary/Sommaire Budget Représentant</h2>
+        <h2> Budget Representative Summary / Sommaire Budget Représentant</h2>
 
         <DataGrid
           id="grid-container"
@@ -80,7 +82,13 @@ export class RepSummary extends Component {
               : null
           }
           onExporting={this.onExporting}
+          height={500}
+          showBorders={true}
+          // remoteOperations={true}
+          wordWrapEnabled={true}
         >
+          <Scrolling mode="virtual" rowRenderingMode="virtual" />
+          <Paging defaultPageSize={25} />
           <HeaderFilter visible={true} />
           <Export enabled={true} />
 
@@ -155,7 +163,7 @@ export class RepSummary extends Component {
               valueFormat="currency"
               displayFormat="{0}"
             />
-          </Summary>
+          </Summary>          
         </DataGrid>
       </div>
     );
