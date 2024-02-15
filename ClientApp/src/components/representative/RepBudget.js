@@ -186,6 +186,7 @@ export class RepBudget extends Component {
           <Column
             dataField="sales_Area_Code"
             caption="Rep Name / Nom Représentant"
+            width={250}
             setCellValue={this.setRepNameValue}
             calculateCellValue={(rowData) =>
               rowData.sales_Area_Code || rowData.rep_Sales_Area_Code
@@ -199,6 +200,7 @@ export class RepBudget extends Component {
           <Column
             dataField="product"
             caption="Brand / Produit"
+            width={200}
             setCellValue={this.setProductValue}
           >
             <Lookup
@@ -211,24 +213,28 @@ export class RepBudget extends Component {
           <Column
             dataField="date_Entry"
             dataType="date"
+            width={200}
             caption="Date of Event / Date de l'Evenement"
           />
 
           <Column
             dataField="event_Name"
             caption="Name Of Event / Nom De L'événement"
+            width={300}
           />
 
           <Column
-            dataField="initiative_ID"
+            dataField="initiative"
             caption="Initiative"
-            calculateCellValue={(rowData) => rowData.initiative}
-            calculateDisplayValue={(rowData) => rowData.initiative}
+            width={250}
+            setCellValue={(rowData, value) => {
+              rowData.initiative = value.initiative;
+              rowData.initiative_ID = value.id;
+            }}
           >
             <Lookup
               dataSource={this.getFilteredInitiatives.bind(this)}
               displayExpr="initiative"
-              valueExpr="idn"
             />
           </Column>
 
@@ -237,9 +243,10 @@ export class RepBudget extends Component {
             dataType="number"
             format="currency"
             caption="Amount / Montant"
+            width={150}
           />
 
-          <Column dataField="type" caption="Status">
+          <Column dataField="type" caption="Status" width={200}>
             <Lookup
               dataSource={statusesData}
               displayExpr="type"
@@ -247,11 +254,12 @@ export class RepBudget extends Component {
             />
           </Column>
 
-          <Column dataField="note" caption="Notes" />
+          <Column dataField="note" caption="Notes" width={300} />
 
           <Column
             dataField="event_Type"
             caption="Type of Event / Type D'événement"
+            width={150}
           >
             <Lookup
               dataSource={eventTypesData}
@@ -260,7 +268,7 @@ export class RepBudget extends Component {
             />
           </Column>
 
-          <Column dataField="attendance" caption="Attendance / Présence">
+          <Column dataField="attendance" caption="Attendance / Présence" width={150}>
             <Lookup
               dataSource={attendanceData}
               displayExpr="name"
@@ -271,6 +279,7 @@ export class RepBudget extends Component {
           <Column
             dataField="shared_Individual"
             caption="Shared/Individual / Événement partagé"
+            width={200}
           >
             <Lookup
               dataSource={sharedIndividualData}
@@ -293,19 +302,22 @@ export class RepBudget extends Component {
             dataField="customer_Count"
             dataType="number"
             caption="# Cust / Nombre clients"
+            width={150}
           />
          
           <Column
             dataField="customer_Type"
             caption="Cust Type / Type de clients"
+            width={250}
           />
           
           <Column
             dataField="fcpA_Veeva_ID"
             caption="#PW and/or #Veeva / #PW et/ou #Veeva"
+            width={200}
           />
-          <Column dataField="account_Name" caption="Institution" />
-          <Column dataField="tier" dataType="number" caption="Tier / Niveau" />
+          <Column dataField="account_Name" caption="Institution" width={300} />
+          <Column dataField="tier" dataType="number" caption="Tier / Niveau" width={100}/>
           <Column dataField="rep_Sales_Area_Code" visible={false} />
 
           <Toolbar>
