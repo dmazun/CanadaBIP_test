@@ -290,11 +290,17 @@ export class RepBudget extends Component {
 
           <Column
             dataField="cust_Name_Display"
-            caption="Speaker / Conférencier"
-            editCellComponent={RepDropDownGridSelect}
+            caption="Speaker / Conférencier"            
+            calculateDisplayValue={(rowData) => rowData.cust_Name_Display}
+            setCellValue={(rowData, value) => {
+              rowData.cust_Name_Display = value.name;
+              rowData.customer_ID = value.reltiO_ID;
+            }}
+            width={300}
           >
             <Lookup
               dataSource={customersData}
+              displayExpr="name" 
             />
           </Column>
           

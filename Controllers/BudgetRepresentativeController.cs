@@ -3,8 +3,8 @@ using CanadaBIP_test.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
 using System.Data;
+using System.Linq.Dynamic;
 
 namespace CanadaBIP_test.Controllers
 {
@@ -13,7 +13,7 @@ namespace CanadaBIP_test.Controllers
     public class BudgetRepresentativeController : ControllerBase
     {
         private readonly BudgetDbContext _context;
-        private readonly User _user;
+        private readonly User _user;        
         public BudgetRepresentativeController(BudgetDbContext context)
         {
             _context = context;
@@ -85,12 +85,38 @@ namespace CanadaBIP_test.Controllers
         }
 
         [HttpGet("RepCustomers")]
-        public IActionResult GetRepCustomerSelect([FromQuery] int skip = 0, [FromQuery] int take = 100)
+        public IActionResult GetRepCustomerSelect
+            (   
+                [FromQuery] int skip = 0, 
+                [FromQuery] int take = 100,
+                [FromQuery] string? filter = ""
+            )
         {
-            List<BudgetCustomerModel> result = _context.BRepCustomerSelect
+            var items = _context.BRepCustomerSelect.AsQueryable();
+            string value = "";
+            
+            if (filter?.Length > 0)
+            {
+                string innerArray = filter.Trim('[', ']');
+                string[] elements = innerArray.Split(',');
+
+                if (elements.Length == 2)
+                {
+                    value = elements[1].Trim('"');
+                }
+
+                if (elements.Length == 3)
+                {
+                    value = elements[2].Trim('"');
+                }
+            }
+
+            var result = items
+                .OrderBy(item => item.ID)
+                .Where(item => item.Name.Contains(value))
                 .Skip(skip)
                 .Take(take)
-                .ToList();
+                .ToList(); 
 
             return Ok(result);
         }
