@@ -88,7 +88,7 @@ namespace CanadaBIP_test.Controllers
         public IActionResult GetRepCustomerSelect
             (   
                 [FromQuery] int skip = 0, 
-                [FromQuery] int take = 100,
+                [FromQuery] int take = 25,
                 [FromQuery] string? filter = ""
             )
         {
@@ -120,7 +120,44 @@ namespace CanadaBIP_test.Controllers
 
             return Ok(result);
         }
-        
+
+        [HttpGet("RepAccounts")]
+        public IActionResult GetRepAccountSelect
+            (
+                [FromQuery] int skip = 0,
+                [FromQuery] int take = 25,
+                [FromQuery] string? filter = ""
+            )
+        {
+            var items = _context.BRepAccountSelect.AsQueryable();
+            string value = "";
+
+            if (filter?.Length > 0)
+            {
+                string innerArray = filter.Trim('[', ']');
+                string[] elements = innerArray.Split(',');
+
+                if (elements.Length == 2)
+                {
+                    value = elements[1].Trim('"');
+                }
+
+                if (elements.Length == 3)
+                {
+                    value = elements[2].Trim('"');
+                }
+            }
+
+            var result = items
+                .OrderBy(item => item.ID)
+                .Where(item => item.Name.Contains(value))
+                .Skip(skip)
+                .Take(take)
+                .ToList();
+
+            return Ok(result);
+        }
+
         [HttpGet("Summary")]
         public IActionResult GetRepSummary()
         {
@@ -153,8 +190,7 @@ namespace CanadaBIP_test.Controllers
             cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = _user.ID });
             cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "INSERT" });
             cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = _context.BRepresentative.Count() });
-            cmd.Parameters.Add(new SqlParameter("@BU", SqlDbType.NVarChar) { Value = _user.BU });
-            cmd.Parameters.Add(new SqlParameter("@Sales_Area_Code", SqlDbType.NVarChar) { Value = _user.Sales_Area_Code });
+            cmd.Parameters.Add(new SqlParameter("@Sales_Area_Code", SqlDbType.NVarChar) { Value = model.Sales_Area_Code });
             cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.Date) { Value = model.Date_Entry });
             cmd.Parameters.Add(new SqlParameter("@Event_Name", SqlDbType.NVarChar) { Value = model.Event_Name });
             cmd.Parameters.Add(new SqlParameter("@Product", SqlDbType.NVarChar) { Value = model.Product });
@@ -195,8 +231,7 @@ namespace CanadaBIP_test.Controllers
             cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = _user.ID });
             cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "UPDATE" });
             cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = id });
-            cmd.Parameters.Add(new SqlParameter("@BU", SqlDbType.NVarChar) { Value = _user.BU });
-            cmd.Parameters.Add(new SqlParameter("@Sales_Area_Code", SqlDbType.NVarChar) { Value = _user.Sales_Area_Code });
+            cmd.Parameters.Add(new SqlParameter("@Sales_Area_Code", SqlDbType.NVarChar) { Value = model.Sales_Area_Code });
             cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.Date) { Value = model.Date_Entry });
             cmd.Parameters.Add(new SqlParameter("@Event_Name", SqlDbType.NVarChar) { Value = model.Event_Name });
             cmd.Parameters.Add(new SqlParameter("@Product", SqlDbType.NVarChar) { Value = model.Product });
@@ -237,9 +272,8 @@ namespace CanadaBIP_test.Controllers
             cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = _user.ID });
             cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "DELETE" });
             cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = id });
-            cmd.Parameters.Add(new SqlParameter("@BU", SqlDbType.NVarChar) { Value = "" });
             cmd.Parameters.Add(new SqlParameter("@Sales_Area_Code", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.Date) { Value = "" });
+            cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.NVarChar) { Value = "" });
             cmd.Parameters.Add(new SqlParameter("@Event_Name", SqlDbType.NVarChar) { Value = "" });
             cmd.Parameters.Add(new SqlParameter("@Product", SqlDbType.NVarChar) { Value = "" });
             cmd.Parameters.Add(new SqlParameter("@Initiative_ID", SqlDbType.Int) { Value = 0 });

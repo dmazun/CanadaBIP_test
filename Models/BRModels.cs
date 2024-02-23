@@ -163,8 +163,8 @@ namespace CanadaBIP_test.Models
         public string? Int_Usr_ID { get; set; }
         public string? step { get; set; }
         public int? ID { get; set; }
-        public string? BU { get; set; }
         public string? Sales_Area_Code { get; set; }
+        public string? Rep_Sales_Area_Code { get; set; }
         public DateTime? Date_Entry { get; set; }
         public string? Event_Name { get; set; }
         public string? Product { get; set; }
@@ -247,6 +247,21 @@ namespace CanadaBIP_test.Models
         public string? RELTIO_ID { get; set; }
         public string? Name { get; set; }
         public string? Specialty { get; set; }
+        public string? Workplace_Name { get; set; }
+        public string? Address { get; set; }
+        public string? City { get; set; }
+        public string? Province { get; set; }
+        public string? PostCode { get; set; }
+        public string? Mbrick { get; set; }
+    }
+
+    [Table("V_Budget_DIM_ACCOUNT", Schema = "budget")]
+    public class BudgetAccountModel
+    {
+        public Int64 ID { get; set; }
+        public string? RELTIO_ID { get; set; }
+        public string? Name { get; set; }
+        public string? Type { get; set; }
         public string? Workplace_Name { get; set; }
         public string? Address { get; set; }
         public string? City { get; set; }

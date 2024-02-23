@@ -18,7 +18,6 @@ import saveAs from "file-saver";
 import { exportDataGrid } from "devextreme/excel_exporter";
 import { ApiService } from "../../services/ApiService";
 import { RepEditNameSelect } from "./RepEditNameSelect";
-import { RepDropDownGridSelect } from "./RepDropDownGridSelect";
 import { attendanceData, sharedIndividualData } from "./data";
 import * as AspNetData from "devextreme-aspnet-data-nojquery";
 
@@ -41,9 +40,15 @@ export class RepBudget extends Component {
           ),
         update: (key, values) =>
           this.apiService.sendRequest(
-          `${API_URL}/${key}`,
-          "PUT",
-          JSON.stringify({ ...this.state.editingRowData, ...values })
+            `${API_URL}/${key}`,
+            "PUT",
+            JSON.stringify({
+              ...this.state.editingRowData,
+              ...values,
+              sales_Area_Code:
+                values.sales_Area_Code ||
+                this.state.editingRowData.rep_Sales_Area_Code,
+            })
           ),
         remove: (key) =>
           this.apiService.sendRequest(`${API_URL}/${key}`, "DELETE", null),
@@ -52,6 +57,10 @@ export class RepBudget extends Component {
       customersData: new AspNetData.createStore({
         key: "name",
         loadUrl: `${API_URL}/RepCustomers`,
+      }),
+      accountsData: new AspNetData.createStore({
+        key: "id",
+        loadUrl: `${API_URL}/RepAccounts`,
       }),
       repNamesData: [],
       productsData: [],
@@ -151,16 +160,26 @@ export class RepBudget extends Component {
 
   setProductValue(rowData, value) {
     rowData.initiative_ID = null;
+    rowData.initiative = null;
     this.defaultSetCellValue(rowData, value);
   }
 
   setRepNameValue(rowData, value) {
     rowData.product = null;
+    rowData.initiative_ID = null;
+    rowData.initiative = null;
     this.defaultSetCellValue(rowData, value);
   }
 
   render() {
-    const { budgetData, repNamesData, statusesData, eventTypesData, customersData } = this.state;
+    const {
+      budgetData,
+      repNamesData,
+      statusesData,
+      eventTypesData,
+      customersData,
+      accountsData,
+    } = this.state;
 
     return (
       <div>
@@ -174,11 +193,12 @@ export class RepBudget extends Component {
               ? ["rep_Sales_Area_Code", "=", this.props.repSACode]
               : null
           }
-          height={500}
+          maxheight={700}
           showBorders={true}
           wordWrapEnabled={true}
           onEditingStart={this.onEditingStart}
           onExporting={this.onExporting}
+          showRowLines={true}
         >
           <HeaderFilter visible={true} />
           <Export enabled={true} />
@@ -186,7 +206,7 @@ export class RepBudget extends Component {
           <Column
             dataField="sales_Area_Code"
             caption="Rep Name / Nom Représentant"
-            width={250}
+            width={200}
             setCellValue={this.setRepNameValue}
             calculateCellValue={(rowData) =>
               rowData.sales_Area_Code || rowData.rep_Sales_Area_Code
@@ -200,7 +220,7 @@ export class RepBudget extends Component {
           <Column
             dataField="product"
             caption="Brand / Produit"
-            width={200}
+            width={150}
             setCellValue={this.setProductValue}
           >
             <Lookup
@@ -213,7 +233,7 @@ export class RepBudget extends Component {
           <Column
             dataField="date_Entry"
             dataType="date"
-            width={200}
+            width={150}
             caption="Date of Event / Date de l'Evenement"
           />
 
@@ -226,7 +246,7 @@ export class RepBudget extends Component {
           <Column
             dataField="initiative"
             caption="Initiative"
-            width={250}
+            width={200}
             setCellValue={(rowData, value) => {
               rowData.initiative = value.initiative;
               rowData.initiative_ID = value.id;
@@ -243,7 +263,7 @@ export class RepBudget extends Component {
             dataType="number"
             format="currency"
             caption="Amount / Montant"
-            width={150}
+            width={100}
           />
 
           <Column dataField="type" caption="Status" width={200}>
@@ -268,7 +288,11 @@ export class RepBudget extends Component {
             />
           </Column>
 
-          <Column dataField="attendance" caption="Attendance / Présence" width={150}>
+          <Column
+            dataField="attendance"
+            caption="Attendance / Présence"
+            width={150}
+          >
             <Lookup
               dataSource={attendanceData}
               displayExpr="name"
@@ -290,7 +314,7 @@ export class RepBudget extends Component {
 
           <Column
             dataField="cust_Name_Display"
-            caption="Speaker / Conférencier"            
+            caption="Speaker / Conférencier"
             calculateDisplayValue={(rowData) => rowData.cust_Name_Display}
             setCellValue={(rowData, value) => {
               rowData.cust_Name_Display = value.name;
@@ -298,32 +322,48 @@ export class RepBudget extends Component {
             }}
             width={300}
           >
-            <Lookup
-              dataSource={customersData}
-              displayExpr="name" 
-            />
+            <Lookup dataSource={customersData} displayExpr="name" />
           </Column>
-          
+
           <Column
             dataField="customer_Count"
             dataType="number"
             caption="# Cust / Nombre clients"
-            width={150}
+            width={100}
           />
-         
+
           <Column
             dataField="customer_Type"
             caption="Cust Type / Type de clients"
             width={250}
+            height={40}
           />
-          
+
           <Column
             dataField="fcpA_Veeva_ID"
             caption="#PW and/or #Veeva / #PW et/ou #Veeva"
             width={200}
           />
-          <Column dataField="account_Name" caption="Institution" width={300} />
-          <Column dataField="tier" dataType="number" caption="Tier / Niveau" width={100}/>
+
+          <Column
+            dataField="account_Name"
+            caption="Institution"
+            calculateDisplayValue={(rowData) => rowData.account_Name}
+            setCellValue={(rowData, value) => {
+              rowData.account_Name = value.name;
+              rowData.account_ID = value.reltiO_ID;
+            }}
+            width={300}
+          >
+            <Lookup dataSource={accountsData} displayExpr="name" />
+          </Column>
+
+          <Column
+            dataField="tier"
+            dataType="number"
+            caption="Tier / Niveau"
+            width={100}
+          />
           <Column dataField="rep_Sales_Area_Code" visible={false} />
 
           <Toolbar>
@@ -342,7 +382,7 @@ export class RepBudget extends Component {
           </Summary>
 
           <Editing
-            mode="row"
+            mode="popup"
             useIcons={true}
             allowUpdating={true}
             allowDeleting={true}
