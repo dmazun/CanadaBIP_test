@@ -11,6 +11,7 @@ import {
   Toolbar,
   Item,
   Lookup,
+  Paging
 } from "devextreme-react/data-grid";
 import CustomStore from "devextreme/data/custom_store";
 import { Workbook } from "exceljs";
@@ -18,6 +19,7 @@ import saveAs from "file-saver";
 import { exportDataGrid } from "devextreme/excel_exporter";
 import { ApiService } from "../../services/ApiService";
 import { RepEditNameSelect } from "./RepEditNameSelect";
+import CustTypeTagBoxComponent  from "./CustTypeTagBoxComponent";
 import { attendanceData, sharedIndividualData } from "./data";
 import * as AspNetData from "devextreme-aspnet-data-nojquery";
 
@@ -67,6 +69,7 @@ export class RepBudget extends Component {
       initiativesData: [],
       statusesData: [],
       eventTypesData: [],
+      custTypesData: [],
     };
   }
 
@@ -76,6 +79,7 @@ export class RepBudget extends Component {
     this.getInitiatives();
     this.geStatuses();
     this.getEventTypes();
+    this.getCustomerTypes();
   }
 
   onEditingStart = (e) => {
@@ -130,6 +134,12 @@ export class RepBudget extends Component {
       .then((res) => this.setState({ eventTypesData: res }));
   }
 
+  getCustomerTypes() {
+    this.apiService
+      .sendRequest(`${API_URL}/RepCustTypes`)
+      .then((res) => this.setState({ custTypesData: res }));
+  }
+
   getProducts() {
     this.apiService
       .sendRequest(`${API_URL}/RepProducts`)
@@ -153,7 +163,13 @@ export class RepBudget extends Component {
 
   getFilteredInitiatives(options) {
     return {
-      store: this.state.initiativesData,
+      store: [ ...this.state.initiativesData, {
+        bu: "PBGH",
+        id: 1,
+        idn: 56,
+        initiative: "OTHER",
+        product: options.data?.product
+      }],
       filter: options.data ? ["product", "=", options.data.product] : null,
     };
   }
@@ -171,6 +187,19 @@ export class RepBudget extends Component {
     this.defaultSetCellValue(rowData, value);
   }
 
+  custTypesCellTemplate(container, options) {
+    const noBreakSpace = '\u00A0';    
+    container.textContent = options.value || noBreakSpace;
+    container.title = options.value;
+  };
+
+  calculateFilterExpression(filterValue, selectedFilterOperation, target) {
+    if (target === 'search' && typeof filterValue === 'string') {
+      return [this.dataField, 'contains', filterValue];
+    }
+    return (rowData) => (rowData.AssignedEmployee || []).indexOf(filterValue) !== -1;
+  }
+
   render() {
     const {
       budgetData,
@@ -179,6 +208,7 @@ export class RepBudget extends Component {
       eventTypesData,
       customersData,
       accountsData,
+      custTypesData,
     } = this.state;
 
     return (
@@ -193,15 +223,17 @@ export class RepBudget extends Component {
               ? ["rep_Sales_Area_Code", "=", this.props.repSACode]
               : null
           }
-          maxheight={700}
           showBorders={true}
-          wordWrapEnabled={true}
           onEditingStart={this.onEditingStart}
           onExporting={this.onExporting}
           showRowLines={true}
         >
           <HeaderFilter visible={true} />
           <Export enabled={true} />
+          <Paging
+            enabled={true}
+            defaultPageSize={10}
+          />
 
           <Column
             dataField="sales_Area_Code"
@@ -335,9 +367,18 @@ export class RepBudget extends Component {
           <Column
             dataField="customer_Type"
             caption="Cust Type / Type de clients"
+            cellTemplate={this.custTypesCellTemplate}
+            editCellComponent={CustTypeTagBoxComponent}
+            calculateFilterExpression={this.calculateFilterExpression}
             width={250}
             height={40}
-          />
+          >
+            <Lookup
+              dataSource={custTypesData}
+              valueExpr="cust_Type"
+              displayExpr="cust_Type"
+            />
+          </Column>
 
           <Column
             dataField="fcpA_Veeva_ID"
@@ -363,7 +404,7 @@ export class RepBudget extends Component {
             dataType="number"
             caption="Tier / Niveau"
             width={100}
-          />
+          /> 
           <Column dataField="rep_Sales_Area_Code" visible={false} />
 
           <Toolbar>
@@ -382,7 +423,7 @@ export class RepBudget extends Component {
           </Summary>
 
           <Editing
-            mode="popup"
+            mode="cell"
             useIcons={true}
             allowUpdating={true}
             allowDeleting={true}

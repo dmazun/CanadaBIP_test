@@ -84,6 +84,16 @@ namespace CanadaBIP_test.Controllers
             return Ok(result);
         }
 
+        [HttpGet("RepCustTypes")]
+        public IActionResult GetRepCustTypes()
+        {
+            List<BudgetCustTypeModel> result = _context.BRepCustTypes
+                .Where(item => item.Status == 1)
+                .ToList();
+
+            return Ok(result);
+        }
+
         [HttpGet("RepCustomers")]
         public IActionResult GetRepCustomerSelect
             (   

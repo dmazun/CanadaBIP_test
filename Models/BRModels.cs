@@ -269,4 +269,16 @@ namespace CanadaBIP_test.Models
         public string? PostCode { get; set; }
         public string? Mbrick { get; set; }
     }
+
+    [Table("Budget_BR_DIC_Cust_Types", Schema = "budget")]
+    public class BudgetCustTypeModel
+    {
+        public int ID { get; set; }
+        public string? Cust_Type { get; set; }
+        public int? Status { get; set; }
+        public string? Creator { get; set; }
+        public DateTime? Created { get; set; }
+        public string? Changer { get; set; }
+        public DateTime? Changed { get; set; }
+    }
 }

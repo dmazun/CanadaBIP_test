@@ -74,7 +74,7 @@ namespace CanadaBIP_test.Controllers
             cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = _user.ID });
             cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "INSERT" });
             cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = _context.BMRepresentative.Count() });
-            cmd.Parameters.Add(new SqlParameter("@BU", SqlDbType.NVarChar) { Value = _user.BU });
+           cmd.Parameters.Add(new SqlParameter("@BU", SqlDbType.NVarChar) { Value = _user.BU });
             cmd.Parameters.Add(new SqlParameter("@Manager_Sales_Area_Code", SqlDbType.NVarChar) { Value = _user.Sales_Area_Code });
             cmd.Parameters.Add(new SqlParameter("@Sales_Area_Code", SqlDbType.NVarChar) { Value = model.Sales_Area_Code });
             cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.NVarChar) { Value = model.Date_Entry });
