@@ -233,7 +233,7 @@ namespace CanadaBIP_test.Controllers
             });
             cmd.Parameters.Add(new SqlParameter("@Customer_Count", SqlDbType.Int)
             {
-                Value = model.Customer_Count.HasValue ? (object)DBNull.Value : model.Customer_Count
+                Value = model.Customer_Count == null ? (object)DBNull.Value : model.Customer_Count
             });
             cmd.Parameters.Add(new SqlParameter("@Customer_Type", SqlDbType.NVarChar)
             {
@@ -249,7 +249,7 @@ namespace CanadaBIP_test.Controllers
             });
             cmd.Parameters.Add(new SqlParameter("@Tier", SqlDbType.Int)
             {
-                Value = model.Tier.HasValue ? (object)DBNull.Value : model.Tier
+                Value = model.Tier == null ? (object)DBNull.Value : model.Tier
             });
 
             SqlParameter outputParameter = new SqlParameter

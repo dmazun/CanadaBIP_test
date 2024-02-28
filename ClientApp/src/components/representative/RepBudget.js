@@ -11,7 +11,8 @@ import {
   Toolbar,
   Item,
   Lookup,
-  Paging
+  Paging,
+  RequiredRule
 } from "devextreme-react/data-grid";
 import CustomStore from "devextreme/data/custom_store";
 import { Workbook } from "exceljs";
@@ -246,6 +247,7 @@ export class RepBudget extends Component {
             calculateDisplayValue={(rowData) => rowData.rep_Employee_Name}
             editCellComponent={RepEditNameSelect}
           >
+            <RequiredRule message="Rep Name is required / Nom Représentant est obligatoire." />
             <Lookup dataSource={repNamesData} />
           </Column>
 
@@ -255,6 +257,7 @@ export class RepBudget extends Component {
             width={150}
             setCellValue={this.setProductValue}
           >
+            <RequiredRule message="Brand is required / Produit est obligatoire." />
             <Lookup
               dataSource={this.getFilteredProducts.bind(this)}
               displayExpr="product"
@@ -267,13 +270,17 @@ export class RepBudget extends Component {
             dataType="date"
             width={150}
             caption="Date of Event / Date de l'Evenement"
-          />
+          >
+            <RequiredRule message="Date of Entry is required / Date de l'entrée est obligatoire." />
+          </Column>
 
           <Column
             dataField="event_Name"
             caption="Name Of Event / Nom De L'événement"
             width={300}
-          />
+          >
+            <RequiredRule message="Name Of Event is required / Nom De L'événement est obligatoire." />
+          </Column>
 
           <Column
             dataField="initiative"
@@ -284,6 +291,7 @@ export class RepBudget extends Component {
               rowData.initiative_ID = value.id;
             }}
           >
+            <RequiredRule message="Initiative is required / Initiative est obligatoire." />
             <Lookup
               dataSource={this.getFilteredInitiatives.bind(this)}
               displayExpr="initiative"
@@ -296,7 +304,9 @@ export class RepBudget extends Component {
             format="currency"
             caption="Amount / Montant"
             width={100}
-          />
+          >
+            <RequiredRule message="Amount is required (mandatory but could be '0') / Montant est obligatoire (mais peut être '0')." />
+          </Column>
 
           <Column dataField="type" caption="Status" width={200}>
             <Lookup
