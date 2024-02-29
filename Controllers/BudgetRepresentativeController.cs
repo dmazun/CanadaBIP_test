@@ -178,6 +178,16 @@ namespace CanadaBIP_test.Controllers
             return Ok(result);
         }
 
+        [HttpGet("RepDetails/{repId}")]
+        public IActionResult GetRepDetails(int repId)
+        {
+            List<BudgetRepresentativeDetailModel> result = _context.BRepDetails
+                .Where(x => x.Budget_Representative_ID == repId)
+                .ToList();
+
+            return Ok(result);
+        }
+
         [HttpGet]
         public IActionResult Get()
         {

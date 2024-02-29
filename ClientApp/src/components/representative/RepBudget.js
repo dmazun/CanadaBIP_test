@@ -6,6 +6,7 @@ import {
   Summary,
   TotalItem,
   Export,
+  MasterDetail,
   HeaderFilter,
   Editing,
   Toolbar,
@@ -21,6 +22,7 @@ import { exportDataGrid } from "devextreme/excel_exporter";
 import { ApiService } from "../../services/ApiService";
 import { RepEditNameSelect } from "./RepEditNameSelect";
 import CustTypeTagBoxComponent  from "./CustTypeTagBoxComponent";
+import RepDetailTemplate  from "./RepDetailTemplate";
 import { attendanceData, sharedIndividualData } from "./data";
 import * as AspNetData from "devextreme-aspnet-data-nojquery";
 
@@ -201,6 +203,10 @@ export class RepBudget extends Component {
     return (rowData) => (rowData.AssignedEmployee || []).indexOf(filterValue) !== -1;
   }
 
+  handleDetailsUpdate() {
+    this.dataGrid.instance.refresh(true);
+  }
+
   render() {
     const {
       budgetData,
@@ -211,6 +217,15 @@ export class RepBudget extends Component {
       accountsData,
       custTypesData,
     } = this.state;
+
+    const DetailsComponent = (component) => {
+      return (
+        <RepDetailTemplate
+          data={component.data}
+          detailsUpdated={this.handleDetailsUpdate}
+        />
+      );
+    };
 
     return (
       <div>
@@ -224,6 +239,7 @@ export class RepBudget extends Component {
               ? ["rep_Sales_Area_Code", "=", this.props.repSACode]
               : null
           }
+          ref={(ref) => (this.dataGrid = ref)}
           showBorders={true}
           onEditingStart={this.onEditingStart}
           onExporting={this.onExporting}
@@ -235,6 +251,7 @@ export class RepBudget extends Component {
             enabled={true}
             defaultPageSize={10}
           />
+          <MasterDetail enabled={true} component={DetailsComponent} />
 
           <Column
             dataField="sales_Area_Code"
