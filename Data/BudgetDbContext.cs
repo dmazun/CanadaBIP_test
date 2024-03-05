@@ -27,5 +27,6 @@ namespace CanadaBIP_test.Data
         public DbSet<BudgetAccountModel> BRepAccountSelect { get; set; }
         public DbSet<BudgetCustTypeModel> BRepCustTypes { get; set; }
         public DbSet<BudgetRepresentativeDetailModel> BRepDetails { get; set; }
+        public DbSet<BudgetRepresentativeDetailEditModel> BRepDetailsEdit { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CanadaBIP_test.Models
 {
@@ -298,5 +299,20 @@ namespace CanadaBIP_test.Models
         public DateTime? Changed { get; set; }
         public int? Is_Expired { get; set; }
         
+    }
+    
+    public class BudgetRepresentativeDetailEditModel
+    {
+        public int ID { get; set; }
+        public string? Int_Usr_ID { get; set; }
+        public string? Step { get; set; }
+        public int Budget_Representative_ID { get; set; }
+        public DateTime? Date_Entry { get; set; }
+        public string? Name { get; set; }
+        [Column(TypeName = "decimal(25, 2)")]
+        public decimal Amount_Allocated { get; set; }
+        public string? Comment { get; set; }
+        public string? Result { get; set; }
+
     }
 }

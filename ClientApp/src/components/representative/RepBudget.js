@@ -203,10 +203,6 @@ export class RepBudget extends Component {
     return (rowData) => (rowData.AssignedEmployee || []).indexOf(filterValue) !== -1;
   }
 
-  handleDetailsUpdate() {
-    this.dataGrid.instance.refresh(true);
-  }
-
   render() {
     const {
       budgetData,
@@ -222,7 +218,7 @@ export class RepBudget extends Component {
       return (
         <RepDetailTemplate
           data={component.data}
-          detailsUpdated={this.handleDetailsUpdate}
+          detailsUpdated={() => this.dataGrid.instance.refresh(true)}
         />
       );
     };

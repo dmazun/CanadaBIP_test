@@ -13,7 +13,7 @@ namespace CanadaBIP_test.Controllers
     public class BudgetRepresentativeController : ControllerBase
     {
         private readonly BudgetDbContext _context;
-        private readonly User _user;        
+        private readonly User _user;
         public BudgetRepresentativeController(BudgetDbContext context)
         {
             _context = context;
@@ -96,15 +96,15 @@ namespace CanadaBIP_test.Controllers
 
         [HttpGet("RepCustomers")]
         public IActionResult GetRepCustomerSelect
-            (   
-                [FromQuery] int skip = 0, 
+            (
+                [FromQuery] int skip = 0,
                 [FromQuery] int take = 25,
                 [FromQuery] string? filter = ""
             )
         {
             var items = _context.BRepCustomerSelect.AsQueryable();
             string value = "";
-            
+
             if (filter?.Length > 0)
             {
                 string innerArray = filter.Trim('[', ']');
@@ -126,7 +126,7 @@ namespace CanadaBIP_test.Controllers
                 .Where(item => item.Name.Contains(value))
                 .Skip(skip)
                 .Take(take)
-                .ToList(); 
+                .ToList();
 
             return Ok(result);
         }
@@ -178,21 +178,12 @@ namespace CanadaBIP_test.Controllers
             return Ok(result);
         }
 
-        [HttpGet("RepDetails/{repId}")]
-        public IActionResult GetRepDetails(int repId)
-        {
-            List<BudgetRepresentativeDetailModel> result = _context.BRepDetails
-                .Where(x => x.Budget_Representative_ID == repId)
-                .ToList();
-
-            return Ok(result);
-        }
-
         [HttpGet]
         public IActionResult Get()
         {
             List<BudgetRepresentativeModel> result = _context.BRepresentative
                 .Where(x => x.Manager_Sales_Area_Code == _user.Sales_Area_Code)
+                .OrderByDescending(x => x.ID)
                 .ToList();
 
             return Ok(result);
@@ -377,6 +368,115 @@ namespace CanadaBIP_test.Controllers
             cmd.Parameters.Add(new SqlParameter("@FCPA_Veeva_ID", SqlDbType.NVarChar) { Value = "" });
             cmd.Parameters.Add(new SqlParameter("@Account_ID", SqlDbType.NVarChar) { Value = "" });
             cmd.Parameters.Add(new SqlParameter("@Tier", SqlDbType.Int) { Value = 0 });
+
+            SqlParameter outputParameter = new SqlParameter
+            {
+                ParameterName = "@Result",
+                SqlDbType = SqlDbType.Int,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(outputParameter);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        [HttpGet("RepDetails/{repId}")]
+        public IActionResult GetRepDetails(int repId)
+        {
+            List<BudgetRepresentativeDetailModel> result = _context.BRepDetails
+                .Where(x => x.Budget_Representative_ID == repId)
+                .ToList();
+
+            return Ok(result);
+        }
+
+        [HttpPost("RepDetails")]
+        public async Task Create(BudgetRepresentativeDetailEditModel model)
+        {
+            using var cmd = _context.BRepDetailsEdit.CreateDbCommand();
+            cmd.CommandText = "[budget].[sp_Update_Budget_Representative_Detail]";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
+
+            cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = _user.ID });
+            cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = (object)DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "INSERT" });
+            cmd.Parameters.Add(new SqlParameter("@Budget_Representative_ID", SqlDbType.NVarChar) { Value = model.Budget_Representative_ID });
+            cmd.Parameters.Add(new SqlParameter("@Amount_Allocated", SqlDbType.NVarChar) { Value = model.Amount_Allocated });
+            cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.DateTime) { Value = (object)DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Name", SqlDbType.NVarChar)
+            {
+                Value = string.IsNullOrEmpty(model.Name) ? (object)DBNull.Value : model.Name
+            });
+            cmd.Parameters.Add(new SqlParameter("@Comment", SqlDbType.NVarChar)
+            {
+                Value = string.IsNullOrEmpty(model.Comment) ? (object)DBNull.Value : model.Comment
+            });
+
+            SqlParameter outputParameter = new SqlParameter
+            {
+                ParameterName = "@Result",
+                SqlDbType = SqlDbType.Int,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(outputParameter);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        [HttpPut("RepDetails/{id}")]
+        public async Task Update(int id, BudgetRepresentativeDetailEditModel model)
+        {
+            using var cmd = _context.BRepDetailsEdit.CreateDbCommand();
+            cmd.CommandText = "[budget].[sp_Update_Budget_Representative_Detail]";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
+
+            cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = _user.ID });
+            cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = id });
+            cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "UPDATE" });
+            cmd.Parameters.Add(new SqlParameter("@Budget_Representative_ID", SqlDbType.NVarChar) { Value = model.Budget_Representative_ID });
+            cmd.Parameters.Add(new SqlParameter("@Amount_Allocated", SqlDbType.NVarChar) { Value = model.Amount_Allocated });
+            cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.DateTime) { Value = model.Date_Entry });
+            cmd.Parameters.Add(new SqlParameter("@Name", SqlDbType.NVarChar)
+            {
+                Value = string.IsNullOrEmpty(model.Name) ? (object)DBNull.Value : model.Name
+            });
+            cmd.Parameters.Add(new SqlParameter("@Comment", SqlDbType.NVarChar)
+            {
+                Value = string.IsNullOrEmpty(model.Comment) ? (object)DBNull.Value : model.Comment
+            });
+
+            SqlParameter outputParameter = new SqlParameter
+            {
+                ParameterName = "@Result",
+                SqlDbType = SqlDbType.Int,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(outputParameter);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        [HttpDelete("RepDetails/{id}")]
+        public async Task DeleteDetail(int id)
+        {
+            using var cmd = _context.BRepDetailsEdit.CreateDbCommand();
+            cmd.CommandText = "[budget].[sp_Update_Budget_Representative_Detail]";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
+
+            cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = id });
+            cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = _user.ID });
+            cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "DELETE" });
+            cmd.Parameters.Add(new SqlParameter("@Budget_Representative_ID", SqlDbType.Int) { Value = (object)DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.DateTime) { Value = (object)DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Name", SqlDbType.NVarChar) { Value = (object)DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Amount_Allocated", SqlDbType.Int) { Value = (object)DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Comment", SqlDbType.NVarChar) { Value = (object)DBNull.Value });
 
             SqlParameter outputParameter = new SqlParameter
             {

@@ -17,6 +17,9 @@ class RepDetailTemplate extends Component {
         onModified: () => this.props.detailsUpdated(),
         load: () =>
           this.apiService.sendRequest(`${API_URL}/RepDetails/${repId}`),
+        insert: (values) => this.apiService.sendRequest(`${API_URL}/RepDetails`, 'POST', JSON.stringify({budget_Representative_ID: repId, ...values})),
+        update: (key, values) => this.apiService.sendRequest(`${API_URL}/RepDetails/${key}`, 'PUT', JSON.stringify({...this.state.editingRowData, ...values})),
+        remove: (key) => this.apiService.sendRequest(`${API_URL}/RepDetails/${key}`, 'DELETE', null),
       }),
       editingRowData: {},
     };
@@ -28,7 +31,9 @@ class RepDetailTemplate extends Component {
     const { detailsData } = this.state;
     return (
       <React.Fragment>
-        <DataGrid dataSource={detailsData} onEditingStart={this.onEditingStart}>
+        <DataGrid dataSource={detailsData} 
+                  onEditingStart={this.onEditingStart} 
+                  width={900}>
           <Column
             dataField="name"
             caption="Itemized Entry"
