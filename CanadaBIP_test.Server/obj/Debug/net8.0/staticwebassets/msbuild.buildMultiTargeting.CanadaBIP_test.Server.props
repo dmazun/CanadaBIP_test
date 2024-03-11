@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\CanadaBIP_test.Server.props" />
+</Project>

@@ -1,0 +1,6 @@
+@CanadaBIP_test.Server_HostAddress = http://localhost:5284
+
+GET {{CanadaBIP_test.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
