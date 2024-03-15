@@ -39,6 +39,17 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [plugin()],
+    esbuild: {
+        loader: 'jsx',
+    },
+    optimizeDeps: {
+        force: true,
+        esbuildOptions: {
+            loader: {
+                '.js': 'jsx',
+            },
+        },
+    },
     resolve: {
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url))
@@ -49,7 +60,23 @@ export default defineConfig({
             '^/weatherforecast': {
                 target: 'https://localhost:7229/',
                 secure: false
-            }
+            },
+            '^/pingauth': {
+                target: 'https://localhost:7229/',
+                secure: false
+            },
+            '^/register': {
+                target: 'https://localhost:7229/',
+                secure: false
+            },
+            '^/login': {
+                target: 'https://localhost:7229/',
+                secure: false
+            },
+            '^/logout': {
+                target: 'https://localhost:7229/',
+                secure: false
+            },
         },
         port: 5173,
         https: {
