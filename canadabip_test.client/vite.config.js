@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { fileURLToPath, URL } from 'node:url';
 
 import { defineConfig } from 'vite';
@@ -75,6 +76,10 @@ export default defineConfig({
             },
             '^/logout': {
                 target: 'https://localhost:7229/',
+                secure: false
+            },
+            '^/BudgetManager': {
+                target: 'https://localhost:7229/api/',
                 secure: false
             },
         },

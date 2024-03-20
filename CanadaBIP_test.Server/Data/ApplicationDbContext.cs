@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using CanadaBIP_test.Server.Models;
+using CanadaBIP_test.Server.Migrations;
 
 namespace CanadaBIP_test.Server.Data
 {
@@ -16,7 +17,13 @@ namespace CanadaBIP_test.Server.Data
             base.OnModelCreating(builder);
         }
 
-        public DbSet<CurrentUser> CurrentUser { get; set; }
+        public DbSet<ProjectUser> ProjectUser { get; set; }
         public DbSet<BudgetManagerViewModel> BudgetManager { get; set; }
+        public DbSet<BMProductModel> BMProduct { get; set; }
+        public DbSet<BudgetManagerEditModel> BudgetManagerEdit { get; set; }
+        public DbSet<BudgetManagerDetailViewModel> BudgetManagerDetail { get; set; }
+        public DbSet<BudgetManagerDetailEditModel> BudgetManagerDetailEdit { get; set; }
+        public DbSet<Result> Result { get; set; }
+
     }
 }

@@ -1,12 +1,16 @@
-import LogoutLink from "../components/LogoutLink.jsx";
-import AuthorizeView, { AuthorizedUser } from "../components/AuthorizeView.jsx";
+/* eslint-disable react/prop-types */
+import { Container } from 'reactstrap';
+import AuthorizeView from "../components/AuthorizeView.jsx";
+import { NavMenu } from '../components/NavMenu';
 
-function Home() {
+function Home(props) {
     return (
         <div>
-            <p>HOME</p>
             <AuthorizeView>
-                <span><LogoutLink>Logout <AuthorizedUser value="email" /></LogoutLink></span>
+                <NavMenu />
+                <Container>
+                    {props?.children}
+                </Container>
             </AuthorizeView>
         </div>
     );

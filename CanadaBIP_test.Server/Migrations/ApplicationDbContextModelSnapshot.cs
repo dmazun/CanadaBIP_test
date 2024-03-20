@@ -157,55 +157,6 @@ namespace CanadaBIP_test.Server.Migrations
                     b.ToTable("V_Budget_Manager", "budget");
                 });
 
-            modelBuilder.Entity("CanadaBIP_test.Server.Models.CurrentUser", b =>
-                {
-                    b.Property<string>("Email_Address")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("BU_NAME")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Employee_Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Parent_Email_Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Parent_Employee_Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Parent_Sales_Area_Code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Parent_Sales_Area_Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RoleName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Sales_Area_Code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Sales_Area_Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Sales_Area_Type")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Sales_Force_Code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Sales_Force_Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Email_Address");
-
-                    b.ToTable("USERS_12062022_OK", "dbo");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
