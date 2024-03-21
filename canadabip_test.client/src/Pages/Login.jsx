@@ -58,8 +58,18 @@ function Login() {
 
     return (
         <div className="containerbox">
+            <div className="containerbox__back"></div>
 
             <div className="login">
+                <div className="login__header">                    
+                    <figure className="logo">
+                        <img src="src/assets/Pfizer_logo2022.png" alt="Pfizer logo" />
+                    </figure>
+
+                    <h1>CANADA</h1>
+                    <h2>Budget tracker</h2>                    
+                </div>
+
                 <h3>Login</h3>
                 <form onSubmit={handleSubmit} className="form">
                     <div>
@@ -91,14 +101,21 @@ function Login() {
                             type="checkbox"
                             id="rememberme"
                             name="rememberme"
+                            className="rememberme__input"
                             checked={rememberme}
-                            onChange={handleChange} /><span>Remember Me</span>
+                            onChange={handleChange} />
+                        <label className="rememberme__label" htmlFor="rememberme">Remember Me</label>
+                        
                     </div>
                     <div className="form__row">
                         <button type="submit">Login</button>
                     </div>
+
+                    
+                    <div className="form__row">
+                       {error && <p className="error">{error}</p>}
+                    </div>
                 </form>
-                {error && <p className="error">{error}</p>}
 
             </div>
             

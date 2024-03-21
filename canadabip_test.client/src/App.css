@@ -1,39 +1,48 @@
-﻿/* #root {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
-}
-
-tr:nth-child(even) {
-    background: #F2F2F2;
-}
-
-tr:nth-child(odd) {
-    background: #FFF;
-}
-
-th, td {
-    padding-left: 1rem;
-    padding-right: 1rem;
-} */
-
-.containerbox {
+﻿.containerbox {
+    position: relative;
     width: 100vw;
     height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: black;
+}
+
+.containerbox__back {    
+    width: 100vw;
+    height: 100vh;
+    background-image: url('./assets/login_bg.jpg');    
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 0% 100%;
+    opacity: 0.5;
 }
 
 .login {
+    position: absolute;
     width: 350px;
+    max-width: 90%;
     color: white;
     background-color: #201a31;
     padding: 48px 36px;
     border-radius: 36px;
-    box-shadow: 0px 0px 5px 10px rgba(32,26,49,1);
+    box-shadow: 0px 0px 50px 10px rgba(32,26,49,1);
+}
+
+.login__header {
+    padding-bottom: 48px;
+    text-align: center;
+}
+
+.logo {
+    display: block;
+    width: 100%;
+
+    img {
+        width: 100%;
+        object-fit: contain;
+    }
 }
 
 .form {
@@ -53,13 +62,37 @@ th, td {
         border: 2px solid #38304d;
         border-radius: 8px;
         padding: 4px 8px;
+    }
 
-        &[type="checkbox"] {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            margin-right: 4px;
+    .rememberme__label {
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding-top: 0;
+        cursor: pointer;
 
+        &::before {
+            content: '';
+            width: 22px;
+            height: 22px;
+            border: 2px solid #0df5e3;
+            margin-right: 8px;
+            border-radius: 4px;
+        }
+    }
+
+    .rememberme__input {
+        display: none;
+
+        &:checked + label:after {
+            position: absolute;
+            left: 6px;
+            top: 9px;
+            content: '';
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            background-color: #0df5e3;
         }
     }
 
@@ -70,9 +103,19 @@ th, td {
         border-radius: 25px;
         background-color: #0df5e3;
         text-transform: uppercase;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+
+    p {
+        margin: 0;
     }
 
     .form__row {        
+        min-height: 47px;
         padding-top: 16px;
         padding-bottom: 4px;
     }
