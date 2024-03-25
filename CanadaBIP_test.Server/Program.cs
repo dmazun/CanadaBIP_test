@@ -62,7 +62,6 @@ namespace CanadaBIP_test.Server
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.MapFallbackToFile("/index.html");

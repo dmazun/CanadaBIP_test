@@ -45,7 +45,7 @@ namespace CanadaBIP_test.Server.Controllers
         public async Task<IActionResult> GetProductsByAreaCode()
         {
             var appUser = await _userManager.GetUserAsync(User);
-            //_userManager.GetClaimsAsync()
+
             var user = await _context.ProjectUser.FirstOrDefaultAsync(user => user.UserName == appUser.Email);
 
             List<BMProductModel> result = _context.BMProduct
@@ -101,7 +101,7 @@ namespace CanadaBIP_test.Server.Controllers
             cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = user.ID });
             cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "UPDATE" });
             cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = id });
-            cmd.Parameters.Add(new SqlParameter("@BU", SqlDbType.NVarChar) { Value = model.BU });
+            cmd.Parameters.Add(new SqlParameter("@BU", SqlDbType.NVarChar) { Value = (object)DBNull.Value });
             cmd.Parameters.Add(new SqlParameter("@Sales_Area_Code", SqlDbType.NVarChar) { Value = model.Sales_Area_Code });
             cmd.Parameters.Add(new SqlParameter("@Product", SqlDbType.NVarChar) { Value = model.Product });
             cmd.Parameters.Add(new SqlParameter("@Amount_Budget", SqlDbType.Decimal) { Value = model.Amount_Budget });
@@ -132,10 +132,10 @@ namespace CanadaBIP_test.Server.Controllers
             cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = user.ID });
             cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "DELETE" });
             cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = id });
-            cmd.Parameters.Add(new SqlParameter("@BU", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Sales_Area_Code", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Product", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Amount_Budget", SqlDbType.Decimal) { Value = 0 });
+            cmd.Parameters.Add(new SqlParameter("@BU", SqlDbType.NVarChar) { Value = (object)DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Sales_Area_Code", SqlDbType.NVarChar) { Value = (object)DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Product", SqlDbType.NVarChar) { Value = (object)DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Amount_Budget", SqlDbType.Decimal) { Value = (object)DBNull.Value });
 
             SqlParameter outputParameter = new SqlParameter
             {

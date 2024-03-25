@@ -1,10 +1,11 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import CustomStore from 'devextreme/data/custom_store';
 import { DataGrid, Column, Editing, Lookup } from "devextreme-react/data-grid";
 import { budgetDetailTypes } from "./data";
 import { ApiService } from "../../services/ApiService";
 
-const API_URL = "https://localhost:7071/api/BudgetManagerDetail";
+const API_ENDPOINT = "api/BudgetManagerDetail";
 
 class BudgetDetailTemplate extends Component {
   constructor(props) {
@@ -16,10 +17,10 @@ class BudgetDetailTemplate extends Component {
       budgetData: new CustomStore({
         key: 'id',
         onModified: () => this.props.budgetDetailsUpdated(),
-        load: () => this.apiService.sendRequest(`${API_URL}/ByManager/${managerId}`),
-        insert: (values) => this.apiService.sendRequest(`${API_URL}`, 'POST', JSON.stringify({budget_Manager_ID: managerId, ...values})),
-        update: (key, values) => this.apiService.sendRequest(`${API_URL}/${key}`, 'PUT', JSON.stringify({...this.state.editingRowData, ...values})),
-        remove: (key) => this.apiService.sendRequest(`${API_URL}/${key}`, 'DELETE', null),
+        load: () => this.apiService.sendRequest(`${API_ENDPOINT}/ByManager/${managerId}`),
+        insert: (values) => this.apiService.sendRequest(`${API_ENDPOINT}`, 'POST', JSON.stringify({budget_Manager_ID: managerId, ...values})),
+        update: (key, values) => this.apiService.sendRequest(`${API_ENDPOINT}/${key}`, 'PUT', JSON.stringify({...this.state.editingRowData, ...values})),
+        remove: (key) => this.apiService.sendRequest(`${API_ENDPOINT}/${key}`, 'DELETE', null),
       }),
       editingRowData: {}
     };  

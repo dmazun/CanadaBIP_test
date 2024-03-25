@@ -20,7 +20,7 @@ import { exportDataGrid } from "devextreme/excel_exporter";
 import BudgetDetailTemplate from "./BudgetDetailTemplate";
 import { ApiService } from "../../services/ApiService";
 
-const API_ENDPOINT = "/BudgetManager";
+const API_ENDPOINT = "/api/BudgetManager";
 
 export class BudgetBrandTable extends Component {
   constructor(props) {

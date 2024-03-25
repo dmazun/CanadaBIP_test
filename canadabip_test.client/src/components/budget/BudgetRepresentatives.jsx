@@ -18,7 +18,7 @@ import { exportDataGrid } from 'devextreme/excel_exporter';
 import { BudgetRepSelectComponent } from "./BudgetRepSelectComponent";
 import { ApiService } from "../../services/ApiService";
 
-const API_URL = "https://localhost:7071/api/BudgetManagerRepresentative";
+const API_ENDPOINT = "/api/BudgetManagerRepresentative";
 
 export class BudgetRepresentatives extends Component {
   constructor(props) {
@@ -28,10 +28,10 @@ export class BudgetRepresentatives extends Component {
     this.state = {
       brandsData: new CustomStore({
         key: 'id',
-        load: () => this.apiService.sendRequest(`${API_URL}`),
-        insert: (values) => this.apiService.sendRequest(`${API_URL}`, 'POST', JSON.stringify(values))
+        load: () => this.apiService.sendRequest(`${API_ENDPOINT}`),
+        insert: (values) => this.apiService.sendRequest(`${API_ENDPOINT}`, 'POST', JSON.stringify(values))
           .then(() => this.getRepNames()),
-        update: (key, values) => this.apiService.sendRequest(`${API_URL}/${key}`, 'PUT', 
+        update: (key, values) => this.apiService.sendRequest(`${API_ENDPOINT}/${key}`, 'PUT', 
           JSON.stringify({
             ...{
               sales_Area_Code: this.state.editingRowData.rep_Sales_Area_Code,
@@ -42,7 +42,7 @@ export class BudgetRepresentatives extends Component {
             ...values
           }))
           .then(() => this.getRepNames()),
-        remove: (key) => this.apiService.sendRequest(`${API_URL}/${key}`, 'DELETE', null)
+        remove: (key) => this.apiService.sendRequest(`${API_ENDPOINT}/${key}`, 'DELETE', null)
           .then(() => this.getRepNames())
       }),
       productsData: [],
@@ -57,12 +57,12 @@ export class BudgetRepresentatives extends Component {
   }
 
   getProducts() {
-    this.apiService.sendRequest(`${API_URL}/Products`)
+    this.apiService.sendRequest(`${API_ENDPOINT}/Products`)
     .then(products => this.setState({ productsData: products }));
   }
 
   getRepNames() {
-    this.apiService.sendRequest(`${API_URL}/RepNames`)
+    this.apiService.sendRequest(`${API_ENDPOINT}/RepNames`)
       .then(res => this.setState({ repNamesData: res }));
   }
 
