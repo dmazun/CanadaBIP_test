@@ -58,10 +58,6 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/weatherforecast': {
-                target: 'https://localhost:7229/',
-                secure: false
-            },
             '^/pingauth': {
                 target: 'https://localhost:7229/',
                 secure: false
@@ -77,10 +73,12 @@ export default defineConfig({
             '^/logout': {
                 target: 'https://localhost:7229/',
                 secure: false
-            },
-            '^/BudgetManager': {
+            },           
+            '/api/': {
                 target: 'https://localhost:7229/api/',
-                secure: false
+                secure: false,
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/api/, ''),
             },
         },
         port: 5173,

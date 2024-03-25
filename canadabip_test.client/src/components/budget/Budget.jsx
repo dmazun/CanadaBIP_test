@@ -3,6 +3,7 @@ import "devextreme/dist/css/dx.light.css";
 
 import { BudgetBrandTable } from "./BudgetBrandTable";
 import { BudgetRepresentatives } from "./BudgetRepresentatives";
+
 export class Budget extends Component {
     constructor(props) {
         super(props);
@@ -15,7 +16,7 @@ export class Budget extends Component {
                 <h1>Budget</h1>
 
                 <BudgetBrandTable productChanged={() => this.repRef.current.getProducts()} />
-                {/* <BudgetRepresentatives ref={this.repRef} /> */}
+                <BudgetRepresentatives ref={this.repRef} />
             </div>
         );
     }
