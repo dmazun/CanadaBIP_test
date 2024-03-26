@@ -79,4 +79,35 @@ namespace CanadaBIP_test.Server.Models
         public int? Result { get; set; }
     }
 
+    [Table("V_Budget_Representative_Detail", Schema = "budget")]
+    public class BudgetRepresentativeDetailModel
+    {
+        public int ID { get; set; }
+        public int? Budget_Representative_ID { get; set; }
+        public DateTime? Date_Entry { get; set; }
+        public string? Name { get; set; }
+        public decimal? Amount_Allocated { get; set; }
+        public string? Comment { get; set; }
+        public int? Status { get; set; }
+        public string? Creator { get; set; }
+        public DateTime? Created { get; set; }
+        public string? Changer { get; set; }
+        public DateTime? Changed { get; set; }
+        public int? Is_Expired { get; set; }
+    }
+
+    public class BudgetRepresentativeDetailEditModel
+    {
+        public int ID { get; set; }
+        public string? Int_Usr_ID { get; set; }
+        public string? Step { get; set; }
+        public int Budget_Representative_ID { get; set; }
+        public DateTime? Date_Entry { get; set; }
+        public string? Name { get; set; }
+        [Column(TypeName = "decimal(25, 2)")]
+        public decimal Amount_Allocated { get; set; }
+        public string? Comment { get; set; }
+        public string? Result { get; set; }
+    }
+
 }

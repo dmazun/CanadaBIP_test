@@ -1,7 +1,6 @@
 ﻿using CanadaBIP_test.Server.Data;
 using CanadaBIP_test.Server.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -41,6 +40,7 @@ namespace CanadaBIP_test.Server.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task Create(BudgetRepresentativeEditModel model)
         {
             var userId = _userManager.GetUserId(User);
@@ -117,6 +117,7 @@ namespace CanadaBIP_test.Server.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task Update(int id, BudgetRepresentativeEditModel model)
         {
             var userId = _userManager.GetUserId(User);
@@ -193,6 +194,7 @@ namespace CanadaBIP_test.Server.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task Delete(int id)
         {
             var userId = _userManager.GetUserId(User);
@@ -222,6 +224,122 @@ namespace CanadaBIP_test.Server.Controllers
             cmd.Parameters.Add(new SqlParameter("@FCPA_Veeva_ID", SqlDbType.NVarChar) { Value = "" });
             cmd.Parameters.Add(new SqlParameter("@Account_ID", SqlDbType.NVarChar) { Value = "" });
             cmd.Parameters.Add(new SqlParameter("@Tier", SqlDbType.Int) { Value = 0 });
+
+            SqlParameter outputParameter = new SqlParameter
+            {
+                ParameterName = "@Result",
+                SqlDbType = SqlDbType.Int,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(outputParameter);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+        
+        [HttpGet("RepDetails/{repId}")]
+        [Authorize]
+        public IActionResult GetRepDetails(int repId)
+        {
+            List<BudgetRepresentativeDetailModel> result = _context.BRepDetails
+                .Where(x => x.Budget_Representative_ID == repId)
+                .ToList();
+
+            return Ok(result);
+        }
+
+        [HttpPost("RepDetails")]
+        [Authorize]
+        public async Task Create(BudgetRepresentativeDetailEditModel model)
+        {
+            var userId = _userManager.GetUserId(User);
+            using var cmd = _context.Result.CreateDbCommand();
+            cmd.CommandText = "[budget].[sp_Update_Budget_Representative_Detail]";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
+
+            cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = userId });
+            cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "INSERT" });
+            cmd.Parameters.Add(new SqlParameter("@Budget_Representative_ID", SqlDbType.NVarChar) { Value = model.Budget_Representative_ID });
+            cmd.Parameters.Add(new SqlParameter("@Amount_Allocated", SqlDbType.NVarChar) { Value = model.Amount_Allocated });
+            cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.DateTime) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Name", SqlDbType.NVarChar)
+            {
+                Value = string.IsNullOrEmpty(model.Name) ? DBNull.Value : model.Name
+            });
+            cmd.Parameters.Add(new SqlParameter("@Comment", SqlDbType.NVarChar)
+            {
+                Value = string.IsNullOrEmpty(model.Comment) ? DBNull.Value : model.Comment
+            });
+
+            SqlParameter outputParameter = new SqlParameter
+            {
+                ParameterName = "@Result",
+                SqlDbType = SqlDbType.Int,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(outputParameter);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        [HttpPut("RepDetails/{id}")]
+        [Authorize]
+        public async Task Update(int id, BudgetRepresentativeDetailEditModel model)
+        {
+            var userId = _userManager.GetUserId(User);
+            using var cmd = _context.Result.CreateDbCommand();
+            cmd.CommandText = "[budget].[sp_Update_Budget_Representative_Detail]";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
+
+            cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = userId });
+            cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = id });
+            cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "UPDATE" });
+            cmd.Parameters.Add(new SqlParameter("@Budget_Representative_ID", SqlDbType.NVarChar) { Value = model.Budget_Representative_ID });
+            cmd.Parameters.Add(new SqlParameter("@Amount_Allocated", SqlDbType.NVarChar) { Value = model.Amount_Allocated });
+            cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.DateTime) { Value = model.Date_Entry });
+            cmd.Parameters.Add(new SqlParameter("@Name", SqlDbType.NVarChar)
+            {
+                Value = string.IsNullOrEmpty(model.Name) ? DBNull.Value : model.Name
+            });
+            cmd.Parameters.Add(new SqlParameter("@Comment", SqlDbType.NVarChar)
+            {
+                Value = string.IsNullOrEmpty(model.Comment) ? DBNull.Value : model.Comment
+            });
+
+            SqlParameter outputParameter = new SqlParameter
+            {
+                ParameterName = "@Result",
+                SqlDbType = SqlDbType.Int,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(outputParameter);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        [HttpDelete("RepDetails/{id}")]
+        [Authorize]
+        public async Task DeleteDetail(int id)
+        {
+            var userId = _userManager.GetUserId(User);
+            using var cmd = _context.Result.CreateDbCommand();
+            cmd.CommandText = "[budget].[sp_Update_Budget_Representative_Detail]";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
+
+            cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = id });
+            cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = userId });
+            cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "DELETE" });
+            cmd.Parameters.Add(new SqlParameter("@Budget_Representative_ID", SqlDbType.Int) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.DateTime) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Name", SqlDbType.NVarChar) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Amount_Allocated", SqlDbType.Int) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Comment", SqlDbType.NVarChar) { Value = DBNull.Value });
 
             SqlParameter outputParameter = new SqlParameter
             {

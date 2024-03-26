@@ -28,6 +28,6 @@ namespace CanadaBIP_test.Server.Data
         public DbSet<BMRepProductModel> BMRepProduct { get; set; }
         public DbSet<BMRepNameModel> BMRepName { get; set; }
         public DbSet<BudgetRepresentativeModel> BRepresentative { get; set; }
-
+        public DbSet<BudgetRepresentativeDetailModel> BRepDetails { get; set; }
     }
 }
