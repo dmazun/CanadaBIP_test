@@ -352,5 +352,163 @@ namespace CanadaBIP_test.Server.Controllers
             await cmd.ExecuteNonQueryAsync();
         }
 
+        [HttpGet("RepNames")]
+        [Authorize]
+        public async Task<IActionResult> GetRepNames()
+        {
+            var appUser = await _userManager.GetUserAsync(User);
+            var user = await _context.ProjectUser.FirstOrDefaultAsync(user => user.UserName == appUser.Email);
+
+            List<BudgetRepNameModel> result = _context.BRepName
+                .Where(x => x.Parent_Sales_Area_Code == user.Sales_Area_Code)
+                .ToList();
+
+            return Ok(result);
+        }
+
+        [HttpGet("RepNamesSelect")]
+        [Authorize]
+        public async Task<IActionResult> GetRepNamesSelect()
+        {
+            var appUser = await _userManager.GetUserAsync(User);
+            var user = await _context.ProjectUser.FirstOrDefaultAsync(user => user.UserName == appUser.Email);
+
+            List<BudgetRepNameSelectModel> result = _context.BRepNameSelect
+                .Where(x => x.Parent_Sales_Area_Code == user.Sales_Area_Code)
+                .ToList();
+
+            return Ok(result);
+        }
+
+        [HttpGet("RepProducts")]
+        public IActionResult GetRepProductsSelect()
+        {
+            List<BudgetRepProductModel> result = _context.BRepProductSelect.ToList();
+
+            return Ok(result);
+        }
+
+        [HttpGet("RepInitiatives")]
+        public IActionResult GetRepInitiativeSelect()
+        {
+            List<BudgetRepInitiativeModel> result = _context.BRepInitiativeSelect.ToList();
+
+            return Ok(result);
+        }
+
+        [HttpGet("RepStatuses")]
+        public IActionResult GetRepStatusSelect()
+        {
+            List<BudgetRepStatusModel> result = _context.BRepStatusSelect.ToList();
+
+            return Ok(result);
+        }
+
+        [HttpGet("RepEventTypes")]
+        public IActionResult GetRepEventTypeSelect()
+        {
+            List<BudgetRepEventTypeModel> result = _context.BRepEventTypeSelect.ToList();
+
+            return Ok(result);
+        }
+
+        [HttpGet("RepCustTypes")]
+        public IActionResult GetRepCustTypes()
+        {
+            List<BudgetCustTypeModel> result = _context.BRepCustTypes
+                .Where(item => item.Status == 1)
+                .ToList();
+
+            return Ok(result);
+        }
+
+        [HttpGet("RepCustomers")]
+        public IActionResult GetRepCustomerSelect
+            (
+                [FromQuery] int skip = 0,
+                [FromQuery] int take = 25,
+                [FromQuery] string? filter = ""
+            )
+        {
+            var items = _context.BRepCustomerSelect.AsQueryable();
+            string value = "";
+
+            if (filter?.Length > 0)
+            {
+                string innerArray = filter.Trim('[', ']');
+                string[] elements = innerArray.Split(',');
+
+                if (elements.Length == 2)
+                {
+                    value = elements[1].Trim('"');
+                }
+
+                if (elements.Length == 3)
+                {
+                    value = elements[2].Trim('"');
+                }
+            }
+
+            var result = items
+                .OrderBy(item => item.ID)
+                .Where(item => item.Name.Contains(value))
+                .Skip(skip)
+                .Take(take)
+                .ToList();
+
+            return Ok(result);
+        }
+
+        [HttpGet("RepAccounts")]
+        public IActionResult GetRepAccountSelect
+            (
+                [FromQuery] int skip = 0,
+                [FromQuery] int take = 25,
+                [FromQuery] string? filter = ""
+            )
+        {
+            var items = _context.BRepAccountSelect.AsQueryable();
+            string value = "";
+
+            if (filter?.Length > 0)
+            {
+                string innerArray = filter.Trim('[', ']');
+                string[] elements = innerArray.Split(',');
+
+                if (elements.Length == 2)
+                {
+                    value = elements[1].Trim('"');
+                }
+
+                if (elements.Length == 3)
+                {
+                    value = elements[2].Trim('"');
+                }
+            }
+
+            var result = items
+                .OrderBy(item => item.ID)
+                .Where(item => item.Name.Contains(value))
+                .Skip(skip)
+                .Take(take)
+                .ToList();
+
+            return Ok(result);
+        }
+
+        [HttpGet("Summary")]
+        [Authorize]
+        public async Task<IActionResult> GetRepSummary()
+        {
+            var appUser = await _userManager.GetUserAsync(User);
+            var user = await _context.ProjectUser.FirstOrDefaultAsync(user => user.UserName == appUser.Email);
+
+            List<BudgetRepSummaryModel> result = _context.BRepSummary
+                .Where(x => x.Manager_Sales_Area_Code == user.Sales_Area_Code)
+                .ToList();
+
+            return Ok(result);
+        }
+
     }
 }

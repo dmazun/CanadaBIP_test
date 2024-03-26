@@ -29,5 +29,15 @@ namespace CanadaBIP_test.Server.Data
         public DbSet<BMRepNameModel> BMRepName { get; set; }
         public DbSet<BudgetRepresentativeModel> BRepresentative { get; set; }
         public DbSet<BudgetRepresentativeDetailModel> BRepDetails { get; set; }
+        public DbSet<BudgetRepNameModel> BRepName { get; set; }
+        public DbSet<BudgetRepNameSelectModel> BRepNameSelect { get; set; }
+        public DbSet<BudgetRepProductModel> BRepProductSelect { get; set; }
+        public DbSet<BudgetRepSummaryModel> BRepSummary { get; set; }
+        public DbSet<BudgetRepInitiativeModel> BRepInitiativeSelect { get; set; }
+        public DbSet<BudgetRepStatusModel> BRepStatusSelect { get; set; }
+        public DbSet<BudgetRepEventTypeModel> BRepEventTypeSelect { get; set; }
+        public DbSet<BudgetCustomerModel> BRepCustomerSelect { get; set; }
+        public DbSet<BudgetAccountModel> BRepAccountSelect { get; set; }
+        public DbSet<BudgetCustTypeModel> BRepCustTypes { get; set; }
     }
 }
