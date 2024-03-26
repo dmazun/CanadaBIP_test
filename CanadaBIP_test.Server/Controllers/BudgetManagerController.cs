@@ -45,7 +45,6 @@ namespace CanadaBIP_test.Server.Controllers
         public async Task<IActionResult> GetProductsByAreaCode()
         {
             var appUser = await _userManager.GetUserAsync(User);
-
             var user = await _context.ProjectUser.FirstOrDefaultAsync(user => user.UserName == appUser.Email);
 
             List<BMProductModel> result = _context.BMProduct
@@ -91,16 +90,14 @@ namespace CanadaBIP_test.Server.Controllers
         [Authorize]
         public async Task Update(int id, BudgetManagerEditModel model)
         {
-            var appUser = await _userManager.GetUserAsync(User);
-            var user = await _context.ProjectUser.FirstOrDefaultAsync(user => user.UserName == appUser.Email);
-
+            var userId = _userManager.GetUserId(User);
             using var cmd = _context.Result.CreateDbCommand();
             cmd.CommandText = "[budget].[sp_Update_Budget_Manager]";
             cmd.CommandType = CommandType.StoredProcedure;
 
             if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
 
-            cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = user.ID });
+            cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = userId });
             cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "UPDATE" });
             cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = id });
             cmd.Parameters.Add(new SqlParameter("@BU", SqlDbType.NVarChar) { Value = DBNull.Value });
@@ -123,16 +120,14 @@ namespace CanadaBIP_test.Server.Controllers
         [Authorize]
         public async Task Delete(int id)
         {
-            var appUser = await _userManager.GetUserAsync(User);
-            var user = await _context.ProjectUser.FirstOrDefaultAsync(user => user.UserName == appUser.Email);
-
+            var userId = _userManager.GetUserId(User);
             using var cmd = _context.Result.CreateDbCommand();
             cmd.CommandText = "[budget].[sp_Update_Budget_Manager]";
             cmd.CommandType = CommandType.StoredProcedure;
 
             if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
 
-            cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = user.ID });
+            cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = userId });
             cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "DELETE" });
             cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = id });
             cmd.Parameters.Add(new SqlParameter("@BU", SqlDbType.NVarChar) { Value = DBNull.Value });
