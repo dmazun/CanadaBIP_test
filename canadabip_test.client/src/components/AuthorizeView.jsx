@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, createContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import { Budget } from './budget/Budget';
 
 const UserContext = createContext({});
 
 function AuthorizeView(props) {
+    console.log('AuthorizeView props', props)
 
     const [authorized, setAuthorized] = useState(false);
     const [loading, setLoading] = useState(true); // add a loading state
@@ -84,8 +84,6 @@ function AuthorizeView(props) {
             return (
                 <>
                     <UserContext.Provider value={user}>{props?.children}</UserContext.Provider>
-                    <Budget />
-                    {/* <Navigate to="/budget" /> */}
                 </>
             );
         } else {

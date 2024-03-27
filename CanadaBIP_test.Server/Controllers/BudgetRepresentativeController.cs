@@ -263,7 +263,7 @@ namespace CanadaBIP_test.Server.Controllers
             cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "INSERT" });
             cmd.Parameters.Add(new SqlParameter("@Budget_Representative_ID", SqlDbType.NVarChar) { Value = model.Budget_Representative_ID });
             cmd.Parameters.Add(new SqlParameter("@Amount_Allocated", SqlDbType.NVarChar) { Value = model.Amount_Allocated });
-            cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.DateTime) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.DateTime) { Value = DateTime.Now });
             cmd.Parameters.Add(new SqlParameter("@Name", SqlDbType.NVarChar)
             {
                 Value = string.IsNullOrEmpty(model.Name) ? DBNull.Value : model.Name
@@ -336,7 +336,7 @@ namespace CanadaBIP_test.Server.Controllers
             cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = userId });
             cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "DELETE" });
             cmd.Parameters.Add(new SqlParameter("@Budget_Representative_ID", SqlDbType.Int) { Value = DBNull.Value });
-            cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.DateTime) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.DateTime) { Value = DateTime.Now });
             cmd.Parameters.Add(new SqlParameter("@Name", SqlDbType.NVarChar) { Value = DBNull.Value });
             cmd.Parameters.Add(new SqlParameter("@Amount_Allocated", SqlDbType.Int) { Value = DBNull.Value });
             cmd.Parameters.Add(new SqlParameter("@Comment", SqlDbType.NVarChar) { Value = DBNull.Value });

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import "devextreme/dist/css/dx.light.css";
 import {
   DataGrid,

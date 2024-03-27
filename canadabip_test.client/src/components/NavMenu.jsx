@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import LogoutLink from "./LogoutLink.jsx";
-import AuthorizeView, { AuthorizedUser } from "./AuthorizeView.jsx";
+import Logout from "./Logout.jsx";
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
 
@@ -37,12 +36,8 @@ export class NavMenu extends Component {
               <NavItem>
                 <NavLink tag={Link} className="text-dark" to="/representative">Representative</NavLink>
               </NavItem>
-              <NavItem>
-                {/* <LogoutLink>Logout <AuthorizedUser value="email" /></LogoutLink> */}
-                <NavLink tag={Link} className="text-dark" > 
-                {/* to="/logout" */}
-                  <LogoutLink>Logout <AuthorizedUser value="email" /></LogoutLink>
-                </NavLink>
+              <NavItem>                
+                <Logout />                
               </NavItem>
             </ul>
           </Collapse>
@@ -51,4 +46,3 @@ export class NavMenu extends Component {
     );
   }
 }
-{/* <span><LogoutLink>Logout <AuthorizedUser value="email" /></LogoutLink></span> */}
