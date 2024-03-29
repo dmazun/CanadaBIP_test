@@ -16,3 +16,24 @@ html {
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
+.header {
+  .navbar-brand {
+    display: flex;
+  }
+}
+
+.navbar-title {
+  display: inline-block;
+  margin: 0;
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1;
+  color: #201a31;
+  text-align: left;
+  padding-left: 16px;
+
+  span {
+    font-size: 14px;
+    font-weight: normal;
+  }
+}

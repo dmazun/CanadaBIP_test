@@ -8,8 +8,6 @@ export default function Representative() {
   
   return (
     <>
-      <h1>Representative</h1>
-
       <RepNameSelect selectRepName={(code) => setRepSACode(code)}  />
       <RepSummary repSACode={repSACode} />
       <RepBudget repSACode={repSACode} />
