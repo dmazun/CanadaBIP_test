@@ -229,8 +229,8 @@ export class RepBudget extends Component {
     };
 
     return (
-      <div>
-        <h2>Budget Representative / Budget Représentant</h2>
+      <div className="section">
+        <h2 className="section__title">Budget Representative / Budget Représentant</h2>
 
         <DataGrid
           id="grid-container"
@@ -245,6 +245,11 @@ export class RepBudget extends Component {
           onEditingStart={this.onEditingStart}
           onExporting={this.onExporting}
           showRowLines={true}
+          wordWrapEnabled={true}
+          allowColumnResizing={true}
+          columnResizingMode="widget"
+          columnMinWidth={50}
+          columnAutoWidth={true}
         >
           <HeaderFilter visible={true} />
           <Export enabled={true} />

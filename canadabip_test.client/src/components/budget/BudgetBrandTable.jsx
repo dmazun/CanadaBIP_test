@@ -122,8 +122,8 @@ export class BudgetBrandTable extends Component {
     };
 
     return (
-      <div>
-        <h2>Brand Level Budget</h2>
+      <div className="section">
+        <h2 className="section__title">Brand Level Budget / Budget par produit</h2>
 
         <DataGrid
           id="grid-container"
@@ -132,6 +132,8 @@ export class BudgetBrandTable extends Component {
           onExporting={this.onExporting}
           onInitNewRow={this.getProducts}
           onEditingStart={this.onEditingStart}
+          showBorders={true}          
+          wordWrapEnabled={true}
         >
           <Export enabled={true} />
 

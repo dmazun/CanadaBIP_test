@@ -74,19 +74,19 @@ export class RepNameSelect extends Component {
 
   render() {
     return (
-      <div>
-        <p>Rep Name/Nom Représentant:</p>
+        <div className="section">
+            <h2 className="section__title">Rep Name / Nom Représentant:</h2>
 
-        <DropDownBox
-          onOptionChanged={this.boxOptionChanged}
-          opened={this.state.isDropDownOpened}
-          dropDownOptions={dropDownOptions}
-          dataSource={this.state.repNames}
-          value={this.state.selectedRowKeys}
-          displayExpr="employee_Name"
-          contentRender={this.contentRender}>
-        </DropDownBox>
-      </div>      
+            <DropDownBox
+            onOptionChanged={this.boxOptionChanged}
+            opened={this.state.isDropDownOpened}
+            dropDownOptions={dropDownOptions}
+            dataSource={this.state.repNames}
+            value={this.state.selectedRowKeys}
+            displayExpr="employee_Name"
+            contentRender={this.contentRender}>
+            </DropDownBox>
+        </div>   
     );
   }
 }

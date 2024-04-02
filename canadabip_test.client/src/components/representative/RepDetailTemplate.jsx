@@ -51,6 +51,7 @@ class RepDetailTemplate extends Component {
           dataSource={detailsData}
           onEditingStart={this.onEditingStart}
           width={900}
+          showBorders={true}
         >
           <Column
             dataField="name"
@@ -71,6 +72,7 @@ class RepDetailTemplate extends Component {
 
           <Editing
             mode="row"
+            useIcons={true}
             allowUpdating={true}
             allowDeleting={true}
             allowAdding={true}

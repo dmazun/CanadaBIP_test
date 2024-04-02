@@ -71,11 +71,12 @@ export class RepSummary extends Component {
   render() {
     const { summaryData } = this.state;
     return (
-      <div>
-        <h2> Budget Representative Summary / Sommaire Budget Représentant</h2>
+      <div className="section">
+        <h2 className="section__title">Budget Representative Summary / Sommaire Budget Représentant</h2>
 
         <DataGrid
           id="grid-container"
+          className="grid-height"
           dataSource={summaryData}
           filterValue={
             this.props.repSACode !== "ALL"
@@ -83,7 +84,6 @@ export class RepSummary extends Component {
               : null
           }
           onExporting={this.onExporting}
-          height={500}
           showBorders={true}
           // remoteOperations={true}
           wordWrapEnabled={true}

@@ -33,6 +33,8 @@ class BudgetDetailTemplate extends Component {
     return (
       <React.Fragment>
         <DataGrid dataSource={budgetData}
+                  showBorders={true}                  
+                  wordWrapEnabled={true}
                   onEditingStart={this.onEditingStart}>            
           <Column dataField="date_Entry" dataType="date" format="MM/dd/yyyy" caption="Date of Entry"></Column>
           <Column dataField="type" caption="Type">            
@@ -43,6 +45,7 @@ class BudgetDetailTemplate extends Component {
 
           <Editing
               mode="row"
+              useIcons={true}
               allowUpdating={true}
               allowDeleting={true}
               allowAdding={true} />

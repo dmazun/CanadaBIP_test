@@ -121,14 +121,16 @@ export class BudgetRepresentatives extends Component {
     const { brandsData, productsData, repNamesData } = this.state;
 
     return (
-      <div>
-        <h2>Budget Allocation to Representatives</h2>
+      <div className="section">
+        <h2 className="section__title">Budget Allocation To Representatives / Allocation de budget aux représentants</h2>
 
         <DataGrid id="grid-container" 
                   dataSource={brandsData}
                   onEditorPreparing={this.onEditorPreparing}
                   onExporting={this.onExporting}
-                  onEditingStart={this.onEditingStart}>
+                  onEditingStart={this.onEditingStart}
+                  wordWrapEnabled={true}
+                  showBorders={true}>
 
           <Export enabled={true} />
 
