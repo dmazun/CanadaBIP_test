@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Container } from "reactstrap";
 import { RepNameSelect } from "./RepNameSelect";
 import { RepSummary } from "./RepSummary";
 import { RepBudget } from "./RepBudget";
@@ -8,9 +9,14 @@ export default function Representative() {
   
   return (
     <>
-      <RepNameSelect selectRepName={(code) => setRepSACode(code)}  />
-      <RepSummary repSACode={repSACode} />
-      <RepBudget repSACode={repSACode} />
+      <Container>
+        <RepNameSelect selectRepName={(code) => setRepSACode(code)}  />
+        <RepSummary repSACode={repSACode} />
+      </Container>
+
+      <Container fluid={true}>
+        <RepBudget repSACode={repSACode} />
+      </Container>
     </>
   );
 }

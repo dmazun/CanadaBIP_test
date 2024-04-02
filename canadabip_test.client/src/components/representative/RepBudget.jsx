@@ -16,10 +16,12 @@ import {
   Paging,
   RequiredRule,
 } from "devextreme-react/data-grid";
+import { Button } from 'devextreme-react/button';
 import CustomStore from "devextreme/data/custom_store";
 import { Workbook } from "exceljs";
 import saveAs from "file-saver";
 import { exportDataGrid } from "devextreme/excel_exporter";
+import { Container } from "reactstrap";
 import { ApiService } from "../../services/ApiService";
 import { RepEditNameSelect } from "./RepEditNameSelect";
 import CustTypeTagBoxComponent from "./CustTypeTagBoxComponent";
@@ -74,6 +76,7 @@ export class RepBudget extends Component {
       statusesData: [],
       eventTypesData: [],
       custTypesData: [],
+      isContainerFluid: false
     };
   }
 
@@ -88,6 +91,12 @@ export class RepBudget extends Component {
 
   onEditingStart = (e) => {
     this.setState({ editingRowData: e.data });
+  };
+
+  changeContainerWidth = () => {
+    this.setState((state) => ({ 
+      isContainerFluid: !state.isContainerFluid 
+    }));
   };
 
   onExporting(e) {
@@ -217,6 +226,7 @@ export class RepBudget extends Component {
       customersData,
       accountsData,
       custTypesData,
+      isContainerFluid,
     } = this.state;
 
     const DetailsComponent = (component) => {
@@ -229,9 +239,13 @@ export class RepBudget extends Component {
     };
 
     return (
+      
       <div className="section">
-        <h2 className="section__title">Budget Representative / Budget Représentant</h2>
+        <Container>
+          <h2 className="section__title">Budget Representative / Budget Représentant</h2>
+        </Container>
 
+        <Container fluid={isContainerFluid}>
         <DataGrid
           id="grid-container"
           dataSource={budgetData}
@@ -440,6 +454,12 @@ export class RepBudget extends Component {
           <Toolbar>
             <Item name="addRowButton" />
             <Item name="exportButton" />
+            <Item> 
+              <Button icon={isContainerFluid ? 'panelright' : 'panelleft'}
+                      onClick={this.changeContainerWidth} 
+                      elementAttr={{ title:"Change table width" }}                      
+                      />
+            </Item>
           </Toolbar>
 
           <Summary>
@@ -460,6 +480,7 @@ export class RepBudget extends Component {
             allowAdding={true}
           />
         </DataGrid>
+        </Container>
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Container } from "reactstrap";
 import "devextreme/dist/css/dx.light.css";
 
 import { BudgetBrandTable } from "./BudgetBrandTable";
@@ -12,10 +13,10 @@ export class Budget extends Component {
 
   render() {
     return (
-      <div>
+      <Container>
         <BudgetBrandTable productChanged={() => this.repRef.current.getProducts()} />
         <BudgetRepresentatives ref={this.repRef} />
-      </div>
+      </Container>
     );
   }
 }

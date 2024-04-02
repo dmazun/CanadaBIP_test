@@ -86,7 +86,7 @@ function AuthorizeView(props) {
         <>
           <UserContext.Provider value={user}>
             <NavMenu pageTitle={props?.pageTitle} />
-            <Container>{props?.children}</Container>
+            <Container fluid={true}>{props?.children}</Container>
           </UserContext.Provider>
         </>
       );
