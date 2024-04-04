@@ -24,8 +24,8 @@ function Login() {
       setError("");
 
       var loginurl = "";
-      if (rememberme == true) loginurl = "/login?useCookies=true";
-      else loginurl = "/login?useSessionCookies=true";
+      if (rememberme == true) loginurl = "/account/login?useCookies=true";
+      else loginurl = "/account/login?useSessionCookies=true";
 
       fetch(loginurl, {
         method: "POST",
@@ -66,24 +66,28 @@ function Login() {
 
         <h3>Login</h3>
         <form onSubmit={handleSubmit} className="form">
-          <div>
-            <label className="forminput" htmlFor="email">
-              Username:
-            </label>
+          <div className="form__row">
+            <div>
+              <label className="forminput" htmlFor="email">
+                Username:
+              </label>
+            </div>
+
+            <div>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={handleChange}
+              />
+            </div>
           </div>
-          <div>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label htmlFor="password">Password:</label>
-          </div>
-          <div>
+
+          <div className="form__row">
+            <div>
+              <label htmlFor="password">Password:</label>
+            </div>
             <input
               type="password"
               id="password"
@@ -92,6 +96,7 @@ function Login() {
               onChange={handleChange}
             />
           </div>
+
           <div className="form__row">
             <input
               type="checkbox"
@@ -105,8 +110,15 @@ function Login() {
               Remember Me
             </label>
           </div>
+
           <div className="form__row">
             <button type="submit">Login</button>
+          </div>
+
+          <div className="form__row">
+            <a className="link" href="/forgot-password">
+              Forgot password?
+            </a>
           </div>
 
           <div className="form__row">

@@ -57,28 +57,18 @@ export default defineConfig({
         }
     },
     server: {
-        proxy: {
-            '^/pingauth': {
-                target: 'https://localhost:7229/',
-                secure: false
-            },
-            '^/register': {
-                target: 'https://localhost:7229/',
-                secure: false
-            },
-            '^/login': {
-                target: 'https://localhost:7229/',
-                secure: false
-            },
-            '^/logout': {
-                target: 'https://localhost:7229/',
-                secure: false
-            },           
+        proxy: {           
             '/api/': {
                 target: 'https://localhost:7229/api/',
                 secure: false,
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, ''),
+            },           
+            '/account/': {
+                target: 'https://localhost:7229/',
+                secure: false,
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/account/, ''),
             },
         },
         port: 5173,

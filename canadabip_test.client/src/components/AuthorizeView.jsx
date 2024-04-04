@@ -60,7 +60,7 @@ function AuthorizeView(props) {
     }
 
     // call the fetch function with retry logic
-    fetchWithRetry("/pingauth", {
+    fetchWithRetry("/account/pingauth", {
       method: "GET",
     })
       .catch((error) => {

@@ -17,7 +17,7 @@ function UserMenu() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("/logout", {
+    fetch("/account/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
