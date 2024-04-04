@@ -142,6 +142,11 @@
       text-decoration: underline;
     }
   }
+  
+  .hint {
+    font-size: 12px;
+    color: #0090ff;
+  }
 }
 
 .section {

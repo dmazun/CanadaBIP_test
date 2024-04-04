@@ -115,6 +115,15 @@ function ChangePassword() {
             <button type="submit">Change Password</button>
           </div>
 
+          <div className="form__row">
+            <p className="hint">Rules for Password Validation:</p>
+            <p className="hint">- Minimum length of 8 characters is required.</p>
+            <p className="hint">- At least one special character (!, #, $ etc.) is required.</p>
+            <p className="hint">- At least one numeric digit (0-9) is required.</p>
+            <p className="hint">- At least one lowercase letter is required.</p>
+            <p className="hint">- At least one uppercase letter is required.</p>
+          </div>
+
           <div className="form__row text-center">
             {error && <p className="error text-center" dangerouslySetInnerHTML={error} />}
             {error && <p className="error text-center">{error}</p>}
