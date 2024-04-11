@@ -17,7 +17,7 @@ function ForgotPassword() {
     } else {
       setError("");
 
-      fetch("/account/forgotPassword", {
+      fetch("/api/ManageUser/forgotPassword", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

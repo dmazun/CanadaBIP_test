@@ -11,6 +11,7 @@ function ChangePassword() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "oldPassword") setOldPassword(value);
     if (name === "oldPasswordConfirm") setOldPasswordConfirm(value);
     if (name === "newPassword") setNewPassword(value);
     if (name === "confirmPassword") setConfirmPassword(value);
@@ -33,7 +34,7 @@ function ChangePassword() {
 
     setError("");
 
-    fetch("/account/changePassword", {
+    fetch("/api/ManageUser/changePassword", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

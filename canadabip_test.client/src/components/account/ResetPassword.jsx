@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
-function ForgotPassword() {
-  const [email, setEmail] = useState("");
+function ResetPassword() {
+  const [searchParams] = useSearchParams();
+  const [email] = useState(searchParams.get('email'));
   const [error, setError] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -9,7 +11,6 @@ function ForgotPassword() {
   // handle change events for input fields
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "email") setEmail(value);
     if (name === "password") setPassword(value);
     if (name === "passwordConfirm") setPasswordConfirm(value);
   };
@@ -17,9 +18,10 @@ function ForgotPassword() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const resetCode = "";
+    const resetCode = searchParams.get('code');
+    const email = searchParams.get('email');
 
-    if (!email || !password || !passwordConfirm) {
+    if (!password || !passwordConfirm) {
       setError("Please fill in all fields.");
       return;
     }
@@ -42,17 +44,16 @@ function ForgotPassword() {
         newPassword: password,
       }),
     })
-      .then((data) => {
-        if (data.ok) {
-          const htmlString = "Your password has been reset. <br /> Please <a href='/login'>click here to login</a>";
-          const theObj = {__html:htmlString};
-          setError(theObj);
-        } else setError("Error Reset Password.");
-      })
-      .catch((error) => {
-        console.error(error);
-        setError("Error Reset Password.");
-      });
+    .then((data) => {
+      if (data.ok) {
+        const htmlString = "Your password has been reset. <br /> Please <a href='/login'>click here to login</a>";
+        setError(htmlString);
+      } else setError("Error Reset Password.");
+    })
+    .catch((error) => {
+      console.error(error);
+      setError("Error Reset Password.");
+    });
   };
 
   return (
@@ -85,14 +86,14 @@ function ForgotPassword() {
                 id="email"
                 name="email"
                 value={email}
-                onChange={handleChange}
+                disabled
               />
             </div>
           </div>
 
           <div className="form__row">
             <div>
-              <label htmlFor="password">Password:</label>
+              <label htmlFor="password">Create new password:</label>
             </div>
             <input
               type="password"
@@ -121,8 +122,7 @@ function ForgotPassword() {
           </div>
 
           <div className="form__row text-center">
-            {error && <p className="error text-center" dangerouslySetInnerHTML={error} />}
-            {error && <p className="error text-center">{error}</p>}
+            {error && <p className="error text-center" dangerouslySetInnerHTML={{__html: error}} />}
           </div>
         </form>
       </div>
@@ -130,4 +130,4 @@ function ForgotPassword() {
   );
 }
 
-export default ForgotPassword;
+export default ResetPassword;
