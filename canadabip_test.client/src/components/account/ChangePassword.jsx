@@ -1,38 +1,38 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function ChangePassword() {
+  const navigate = useNavigate();
   const [oldPassword, setOldPassword] = useState("");
-  const [oldPasswordConfirm, setOldPasswordConfirm] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  // todo: Set current password to oldPassword
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "oldPassword") setOldPassword(value);
-    if (name === "oldPasswordConfirm") setOldPasswordConfirm(value);
     if (name === "newPassword") setNewPassword(value);
     if (name === "confirmPassword") setConfirmPassword(value);
   };
 
+  function validatePassword() {
+    const regExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!$%^&@#?~][A-Za-z0-9]).{8,32}$/;
+    return regExp.test(newPassword);
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError("");
 
-    if (oldPassword !== oldPasswordConfirm) {
-      setError("Entered password is wrong.");
-      return
-    } 
-    
     if (confirmPassword !== newPassword) {
       setError("Passwords are not the same.");
-      return
-    } 
-    
-    // todo: Validate new password
+      return;
+    }
 
-    setError("");
+    if (!validatePassword()) {
+      setError("Password is not valid");
+      return;
+    }
 
     fetch("/api/ManageUser/changePassword", {
       method: "POST",
@@ -40,15 +40,21 @@ function ChangePassword() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        oldPassword: oldPassword,
         newPassword: newPassword,
       }),
     })
       .then((data) => {
         if (data.ok) {
-          const htmlString = "Your password has been change. <br /> Please <a href='/login'>click here to login</a>";
-          const theObj = {__html:htmlString};
-          setError(theObj);
+          setError("Your password has been changed");
+          return;
         } else setError("Error Change Password.");
+      })
+      .then(() => {
+        return fetch("/account/logout", { method: "POST" });
+      })
+      .then((data) => {
+        if (data.ok) setTimeout(() => navigate("/login"), 1500);
       })
       .catch((error) => {
         console.error(error);
@@ -71,7 +77,7 @@ function ChangePassword() {
         </div>
 
         <h3>Change password</h3>
-        
+
         <form onSubmit={handleSubmit} className="form">
           <div className="form__row">
             <div>
@@ -126,7 +132,6 @@ function ChangePassword() {
           </div>
 
           <div className="form__row text-center">
-            {error && <p className="error text-center" dangerouslySetInnerHTML={error} />}
             {error && <p className="error text-center">{error}</p>}
           </div>
         </form>

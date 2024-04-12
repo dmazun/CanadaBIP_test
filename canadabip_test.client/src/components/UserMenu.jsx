@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-empty */
-import { useState } from 'react';
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthorizedUser, AuthorizedUserLogo } from "./AuthorizeView.jsx";
 import {
@@ -8,7 +8,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-} from 'reactstrap';
+} from "reactstrap";
 
 function UserMenu() {
   const navigate = useNavigate();
@@ -36,13 +36,27 @@ function UserMenu() {
 
   return (
     <>
-      <Dropdown isOpen={dropdownOpen} toggle={toggle} >
-        <DropdownToggle className="header__logo" style={{ borderRadius: "50%", backgroundColor: "#201a31" }} >
+      <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+        <DropdownToggle
+          className="header__logo"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "40px",
+            width: "40px",
+            borderRadius: "50%",
+            backgroundColor: "#201a31",
+          }}
+        >
           <AuthorizedUserLogo value="email" />
         </DropdownToggle>
 
         <DropdownMenu>
-          <DropdownItem header><AuthorizedUser value="email" /></DropdownItem>
+          <DropdownItem header>
+            <AuthorizedUser value="email" />
+          </DropdownItem>          
+          <DropdownItem href="/change-password">Change password</DropdownItem>
           <DropdownItem onClick={handleSubmit}>Logout</DropdownItem>
         </DropdownMenu>
       </Dropdown>
