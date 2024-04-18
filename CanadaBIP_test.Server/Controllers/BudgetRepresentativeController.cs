@@ -44,6 +44,9 @@ namespace CanadaBIP_test.Server.Controllers
         public async Task Create(BudgetRepresentativeEditModel model)
         {
             var userId = _userManager.GetUserId(User);
+            var appUser = await _userManager.GetUserAsync(User);
+            var user = await _context.ProjectUser.FirstOrDefaultAsync(user => user.UserName == appUser.Email);
+
             using var cmd = _context.Result.CreateDbCommand();
             cmd.CommandText = "[budget].[sp_Update_Budget_Representative]";
             cmd.CommandType = CommandType.StoredProcedure;
@@ -53,6 +56,7 @@ namespace CanadaBIP_test.Server.Controllers
             cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = userId });
             cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "INSERT" });
             cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = _context.BRepresentative.Count() });
+            cmd.Parameters.Add(new SqlParameter("@BU", SqlDbType.NVarChar) { Value = user.BU });
             cmd.Parameters.Add(new SqlParameter("@Sales_Area_Code", SqlDbType.NVarChar) { Value = model.Sales_Area_Code });
             cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.Date) { Value = model.Date_Entry });
             cmd.Parameters.Add(new SqlParameter("@Event_Name", SqlDbType.NVarChar) { Value = model.Event_Name });
@@ -121,6 +125,9 @@ namespace CanadaBIP_test.Server.Controllers
         public async Task Update(int id, BudgetRepresentativeEditModel model)
         {
             var userId = _userManager.GetUserId(User);
+            var appUser = await _userManager.GetUserAsync(User);
+            var user = await _context.ProjectUser.FirstOrDefaultAsync(user => user.UserName == appUser.Email);
+
             using var cmd = _context.Result.CreateDbCommand();
             cmd.CommandText = "[budget].[sp_Update_Budget_Representative]";
             cmd.CommandType = CommandType.StoredProcedure;
@@ -130,6 +137,7 @@ namespace CanadaBIP_test.Server.Controllers
             cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = userId });
             cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "UPDATE" });
             cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = id });
+            cmd.Parameters.Add(new SqlParameter("@BU", SqlDbType.NVarChar) { Value = user.BU });
             cmd.Parameters.Add(new SqlParameter("@Sales_Area_Code", SqlDbType.NVarChar) { Value = model.Sales_Area_Code });
             cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.Date) { Value = model.Date_Entry });
             cmd.Parameters.Add(new SqlParameter("@Event_Name", SqlDbType.NVarChar) { Value = model.Event_Name });
@@ -207,23 +215,24 @@ namespace CanadaBIP_test.Server.Controllers
             cmd.Parameters.Add(new SqlParameter("@Int_Usr_ID", SqlDbType.NVarChar) { Value = userId });
             cmd.Parameters.Add(new SqlParameter("@step", SqlDbType.NVarChar) { Value = "DELETE" });
             cmd.Parameters.Add(new SqlParameter("@ID", SqlDbType.Int) { Value = id });
-            cmd.Parameters.Add(new SqlParameter("@Sales_Area_Code", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Event_Name", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Product", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Initiative_ID", SqlDbType.Int) { Value = 0 });
-            cmd.Parameters.Add(new SqlParameter("@Note", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Type", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Event_Type", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Attendance", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Shared_Individual", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Amount_Allocated", SqlDbType.Decimal) { Value = 0 });
-            cmd.Parameters.Add(new SqlParameter("@Customer_ID", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Customer_Count", SqlDbType.Int) { Value = 0 });
-            cmd.Parameters.Add(new SqlParameter("@Customer_Type", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@FCPA_Veeva_ID", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Account_ID", SqlDbType.NVarChar) { Value = "" });
-            cmd.Parameters.Add(new SqlParameter("@Tier", SqlDbType.Int) { Value = 0 });
+            cmd.Parameters.Add(new SqlParameter("@BU", SqlDbType.NVarChar) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Sales_Area_Code", SqlDbType.NVarChar) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Date_Entry", SqlDbType.NVarChar) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Event_Name", SqlDbType.NVarChar) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Product", SqlDbType.NVarChar) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Initiative_ID", SqlDbType.Int) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Note", SqlDbType.NVarChar) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Type", SqlDbType.NVarChar) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Event_Type", SqlDbType.NVarChar) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Attendance", SqlDbType.NVarChar) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Shared_Individual", SqlDbType.NVarChar) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Amount_Allocated", SqlDbType.Decimal) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Customer_ID", SqlDbType.NVarChar) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Customer_Count", SqlDbType.Int) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Customer_Type", SqlDbType.NVarChar) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@FCPA_Veeva_ID", SqlDbType.NVarChar) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Account_ID", SqlDbType.NVarChar) { Value = DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Tier", SqlDbType.Int) { Value = DBNull.Value });
 
             SqlParameter outputParameter = new SqlParameter
             {

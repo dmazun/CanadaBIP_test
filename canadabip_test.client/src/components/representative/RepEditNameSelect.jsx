@@ -54,8 +54,7 @@ export class RepEditNameSelect extends Component {
   onSelectionChanged(selectionChangedArgs) {
     if (selectionChangedArgs.selectedRowKeys.length) {
       this.setState({
-        selectedRowKeys:
-          selectionChangedArgs.selectedRowKeys[0].sales_Area_Code,
+        selectedRowKeys: selectionChangedArgs.selectedRowKeys[0].sales_Area_Code,
         isDropDownOpened: selectionChangedArgs.selectedRowKeys.length === 0,
       });
 

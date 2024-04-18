@@ -57,6 +57,7 @@ namespace CanadaBIP_test.Server.Models
         public string? Int_Usr_ID { get; set; }
         public string? step { get; set; }
         public int? ID { get; set; }
+        public string? BU { get; set; }
         public string? Sales_Area_Code { get; set; }
         public string? Rep_Sales_Area_Code { get; set; }
         public DateTime? Date_Entry { get; set; }

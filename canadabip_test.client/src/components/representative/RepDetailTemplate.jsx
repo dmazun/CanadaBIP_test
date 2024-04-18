@@ -16,6 +16,7 @@ class RepDetailTemplate extends Component {
       detailsData: new CustomStore({
         key: "id",
         onModified: () => this.props.detailsUpdated(),
+        onRemoved: () => this.props.detailsUpdated(),
         load: () =>
           this.apiService.sendRequest(`${API_ENDPOINT}/RepDetails/${repId}`),
         insert: (values) =>
