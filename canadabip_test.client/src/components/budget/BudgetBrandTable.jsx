@@ -50,7 +50,7 @@ export class BudgetBrandTable extends Component {
     };
 
     this.getProducts = this.getProducts.bind(this);
-    this.handleBudgetDetailsUpdate = this.handleBudgetDetailsUpdate.bind(this);
+    this.refreshGrid = this.refreshGrid.bind(this);
     this.getProductName = this.getProductName.bind(this);
     this.allowUpdating = this.allowUpdating.bind(this);
   }
@@ -70,7 +70,7 @@ export class BudgetBrandTable extends Component {
     });
   }
 
-  handleBudgetDetailsUpdate() {
+  refreshGrid() {
     this.dataGrid.instance.refresh(true);
   }
 
@@ -116,7 +116,7 @@ export class BudgetBrandTable extends Component {
       return (
         <BudgetDetailTemplate
           data={e}
-          budgetDetailsUpdated={this.handleBudgetDetailsUpdate}
+          budgetDetailsUpdated={this.refreshGrid}
         />
       );
     };

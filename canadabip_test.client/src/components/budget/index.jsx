@@ -9,13 +9,20 @@ export class Budget extends Component {
   constructor(props) {
     super(props);
     this.repRef = React.createRef();
+    this.brandRef = React.createRef();
   }
 
   render() {
     return (
       <Container>
-        <BudgetBrandTable productChanged={() => this.repRef.current.getProducts()} />
-        <BudgetRepresentatives ref={this.repRef} />
+        <BudgetBrandTable
+          ref={this.brandRef}
+          productChanged={() => this.repRef.current.getProducts()}
+        />
+        <BudgetRepresentatives 
+          ref={this.repRef}
+          budgetChanged={() => this.brandRef.current.refreshGrid()}
+        />
       </Container>
     );
   }
