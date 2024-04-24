@@ -4,6 +4,11 @@ import App from './App.jsx'
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.css';
 
+import config from 'devextreme/core/config'; 
+import { licenseKey } from './devextreme-license'; 
+ 
+config({ licenseKey });   
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
